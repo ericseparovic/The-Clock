@@ -24,3 +24,5 @@ def update_personal(idPersonal, document, name, lastname, gender, birthday, phon
 #obtiene id usuario
 def search_id_personal(email):
     return model_personal.search_id_personal(email)
+
+

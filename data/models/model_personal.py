@@ -107,3 +107,6 @@ def assign_time(idPersonal, idSchedule):
         db = DataBase()
         db.ejecutar_sql(assign_time_sql)
         return 'Se registro la hora correctamente', 200
+
+
+

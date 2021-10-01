@@ -1,35 +1,41 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
+# from flask.wrappers import Request
 from services import auth
 from services import company
 from services import personal
 from services import schedule
 from services import mark
+from services import absences
+from datetime import datetime
 import os
 
 app = Flask(__name__)
 
 app.config.update(SECRET_KEY=os.urandom(24))
 
-#Ruta login usuarios
-@app.route('/login')
-def login():
-    return render_template("login.html")
-
-
 #Ruta registro de empresas
-@app.route('/register')
-def register():
-    return render_template("register.html")
+@app.route('/register_company')
+def register_company():
+    return render_template("register_company.html")
 
-
-#Ruta registro de empresas
+#Login empresas
 @app.route('/')
-def index():
-    if 'email' in session:
-        return render_template("index.html")
+def login_company():
+    return render_template('login_company.html')
+
+#Login personal
+@app.route('/login_personal')
+def login_personal():
+    return render_template("login_personal.html")
+
+@app.route('/index_company')
+def index_company():
+    if 'company' in session:
+        return render_template('index_company.html')
     else:
-        return "No tiene permisos"
-    
+        return  redirect(url_for('login_company'))
+
+
 
 
 #Se ejecuta al registrar la empresa, se guarda los datos del usuario en la tabla usuarios y se guarda los datos de la empresa en la tabla empresas
@@ -120,12 +126,10 @@ def signin():
                     #se guardan los datos de la sesion, usuario y id
                     session['email'] = email
                     session['personal'] = idPersonal
-
+                    
                     return "Bienvenido usuario Personal"
 
             else:
-                #Ejecuta el metodo login
-                # return redirect(url_for('login'))
                 return 'Usuario o contrasña incorrecto'
         
         else: 
@@ -135,15 +139,15 @@ def signin():
 #Cierra seccion del usuario
 @app.route('/logout', methods=["POST", "GET"])
 def logout():
-    if request.methods == 'POST':
+    if request.method == 'POST':
         session.clear()
-        return redirect(url_for('login'))
+        return "Sesion Cerrada", 200
 
 
 
 
 #Crea usuario en la tabla usuarios y guarda los datos del empleado en la tabla empleados
-@app.route('/register-personal', methods=["POST", "GET"])
+@app.route('/register_personal', methods=["POST", "GET"])
 def register_personal():
      if request.method == 'POST':
         document = request.form['document']
@@ -185,7 +189,7 @@ def register_personal():
             if auth.search_user(email) == True:
                 return "Usuario registrado", 412
             else:
-                #Se verifica que el usuario adm tenga iniciado sesion
+                #Se verifica que el usuario administrador tenga iniciado sesion
                 if 'email' in session:
                     idCompany = session['company']
 
@@ -203,7 +207,7 @@ def register_personal():
 
 
 #Api lista de empleados
-@app.route('/all-personal/<idCompany>')
+@app.route('/all_personal/<idCompany>')
 def get_all_personal(idCompany):
     allPersonal = personal.get_all_personal(idCompany)
 
@@ -276,17 +280,23 @@ def insert_schedule():
         else:
             return validation_form()
 
-#Marcar hora de entrada y salida
-@app.route('/mark-start', methods=['POST'])
+#Marcar hora de entrada
+@app.route('/mark_start', methods=['POST'])
 def insert_mark_start():
+    
+
+    
 
     #Se verifica que sea un metods POST
     if request.method == 'POST':
+
+        #Se obtiene la hora y la fecha
+        DT = datetime.now()
+        hour = DT.strftime("%X")
+        date = DT.strftime("%x")
+
         #Se verifica que el usuario ese en session
         if 'personal' in session:
-            #Se obtienen los datos de formularoi
-            hour = request.form['hour']
-            date = request.form['date']
             idPersonal = session['personal']
 
             #se valida el formulario
@@ -302,16 +312,19 @@ def insert_mark_start():
             return 'Debe iniciar sesion', 412
     
 
-@app.route('/mark-end', methods=['POST'])
+#marca hora salida
+@app.route('/mark_end', methods=['POST'])
 def insert_mark_end():
 
     #Se verifica que sea un metods POST
     if request.method == 'POST':
+        #Se obtiene la hora y la fecha
+        DT = datetime.now()
+        hour = DT.strftime("%X")
+        date = DT.strftime("%x")
         #Se verifica que el usuario ese en session
         if 'personal' in session:
             #Se obtienen los datos de formularoi
-            hour = request.form['hour']
-            date = request.form['date']
             idPersonal = session['personal']
 
             #se valida el formulario
@@ -321,10 +334,40 @@ def insert_mark_end():
                 return  True
         
             if validation_form() == True:
+                print(idPersonal, hour, date)
                 result = mark.insert_mark_end(idPersonal, hour, date)
                 return result
         else:
             return 'Debe iniciar sesion', 412
+
+
+
+#Indicar dias libres
+@app.route('/insert_absence', methods=['POST'])
+def insert_absence():
+    #Se verifica que sea metodo POST
+    if request.method == 'POST':
+        #Se obtiene los datos
+        startDate = request.form['startDate']
+        endDate = request.form['endDate']
+        reason = request.form['reason']
+        idPersonal = request.form['idPersonal']
+        
+         #se valida el formulario
+        def validation_form():
+            if startDate == '':
+                return 'Debe indicar fecha desde', 412
+            if endDate == '':
+                    return 'Debe indicar fecha hasta', 412
+            if reason == '':
+                    return 'Debe indicar motivo', 412
+            return True
+
+        if validation_form() == True:
+          result = absences.insert_absence(idPersonal, startDate, endDate, reason)
+          return result
+
+
 
 
 
