@@ -26,3 +26,5 @@ def search_id_personal(email):
     return model_personal.search_id_personal(email)
 
 
+def get_id_personal(document, idCompany):
+    return model_personal.get_id_personal(document, idCompany)

@@ -62,7 +62,9 @@ HORA_ENTRADA TIME,
 HORA_SALIDA TIME,
 FECHA DATE,
 DURACION INTEGER,
-INCIDENCIA TEXT,
+INCIDENCIA_ASISTENCIA TEXT,
+INCIDENCIA_HORARIO_ENTRADA,
+INCIDENCIA_HORARIO_SALIDA,
 ID_EMPLEADO INTEGER,
 FOREIGN KEY (ID_EMPLEADO) REFERENCES EMPLEADOS (ID_EMPLEADO)
 )
@@ -71,13 +73,25 @@ FOREIGN KEY (ID_EMPLEADO) REFERENCES EMPLEADOS (ID_EMPLEADO)
 sql_tabla_ausencias = '''
 CREATE TABLE IF NOT EXISTS AUSENCIAS(
  ID_AUSENCIA INTEGER PRIMARY KEY,
- FECHA_DESDE DATE,
- FECHA_HASTA DATE,
+ FECHA_AUSENCIA DATE,
  MOTIVO TEXT,
  ID_EMPLEADO INTEGER,
 FOREIGN KEY (ID_EMPLEADO) REFERENCES EMPLEADOS (ID_EMPLEADO)
 )
 '''
+
+sql_tabla_notificaciones = '''
+CREATE TABLE IF NOT EXISTS NOTIFICACIONES(
+ ID_NOTIFICACION INTEGER PRIMARY KEY,
+ FECHA_NOTIFICACION DATE,
+ HORA TIME,
+ ASUNTO TEXT,
+ DESCRIPCION,
+ ID_EMPLEADO INTEGER,
+FOREIGN KEY (ID_EMPLEADO) REFERENCES EMPLEADOS (ID_EMPLEADO)
+)
+'''
+
 
 if __name__ == '__main__':
     try:
@@ -106,6 +120,9 @@ if __name__ == '__main__':
         conexion.execute(sql_tabla_ausencias)
         print('Creando ausencias..')
         
+        conexion.execute(sql_tabla_notificaciones)
+        print('Creando notificaciones..')
+
         conexion.close()
         print('Creacion Finalizada.')
     except Exception as e:

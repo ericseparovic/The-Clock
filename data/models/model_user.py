@@ -10,6 +10,7 @@ def create_user(email, password, idRol):
     """
     db = DataBase()
     db.ejecutar_sql(create_user_sql)
+
     id = search_id_user(email)
 
     return id[0][0]

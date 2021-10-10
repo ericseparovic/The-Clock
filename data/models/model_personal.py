@@ -6,13 +6,17 @@ from data.models import model_user
 def register_personal(document, name, lastname, gender, birthday, phone, address, idUser, idCompany):
 
     register_personal_sql = f"""
-        INSERT INTO EMPLEADOS(DOCUMENTO, NOMBRE, APELLIDO, GENERO, FECHA_NACIMIENTO, TELEFONO, DIRECCION, ID_USUARIO, ID_EMPRESA)
-        VALUES ('{document}','{name}', '{lastname}', '{gender}', '{birthday}', '{phone}','{address}','{idUser}', '{idCompany}')
+    INSERT INTO EMPLEADOS(DOCUMENTO, NOMBRE, APELLIDO, GENERO, FECHA_NACIMIENTO, TELEFONO, DIRECCION, ID_USUARIO, ID_EMPRESA)
+    VALUES ('{document}','{name}', '{lastname}', '{gender}', '{birthday}', '{phone}','{address}','{idUser}', '{idCompany}')
     """
     bd = DataBase()
-    valor = bd.ejecutar_sql(register_personal_sql)
+    bd.ejecutar_sql(register_personal_sql)
 
-    return True
+    return "Se registro empleado", 200
+    
+    
+
+    
 
 
 #Obtiene todos los empleado de la empresa
@@ -22,9 +26,25 @@ def get_all_personal(idCompany):
     """ 
 
     db = DataBase()
-    user = db.ejecutar_sql(select_allpersonal_sql)
-    
-    return user
+    all_personal = []
+
+    for personal in db.ejecutar_sql(select_allpersonal_sql):
+        dict_personal = {
+            'idPersonal': personal[0],
+            'document': personal[1],
+            'name': personal[2],
+            'lastName': personal[3],
+            'genero': personal[4],
+            'year': personal[5],
+            'phone': personal[6],
+            'address': personal[7],
+            'idUser': personal[8],
+            'idCompany': personal[9],
+            'idHour': personal[10]
+        }
+
+        all_personal.append(dict_personal)
+    return all_personal
 
 #Obtiene empleado por id
 def get_personal(idPersonal):
@@ -34,10 +54,25 @@ def get_personal(idPersonal):
     """ 
 
     db = DataBase()
-    user = db.ejecutar_sql(select_personal_sql)
-    
-    return user
+    all_personal = []
 
+    for personal in db.ejecutar_sql(select_personal_sql):
+        dict_personal = {
+            'idPersonal': personal[0],
+            'document': personal[1],
+            'name': personal[2],
+            'lastName': personal[3],
+            'genero': personal[4],
+            'year': personal[5],
+            'phone': personal[6],
+            'address': personal[7],
+            'idUser': personal[8],
+            'idCompany': personal[9],
+            'idHour': personal[10]
+        }
+
+        all_personal.append(dict_personal)
+    return all_personal
 
 
 #Elimina empleado de la tabla empleados
@@ -110,3 +145,14 @@ def assign_time(idPersonal, idSchedule):
 
 
 
+def get_id_personal(document, idCompany):
+    select_id_sql =  f"""
+            SELECT ID_EMPLEADO FROM EMPLEADOS WHERE DOCUMENTO='{document}' AND ID_EMPRESA='{idCompany}'
+    """ 
+    db = DataBase()
+    idPersonal = db.ejecutar_sql(select_id_sql) 
+    
+    if idPersonal:
+        return True
+    else: 
+        return False

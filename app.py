@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
-# from flask.wrappers import Request
 from services import auth
 from services import company
 from services import personal
@@ -82,10 +81,11 @@ def signup():
 
 
 
-#Inicio de sesion para empresas
+#Inicio de sesion para empresas y usuarios
 @app.route('/signin', methods=["POST", "GET"])
 def signin():
     if request.method == 'POST':
+
         email = request.form['email']
         password = request.form['password']
 
@@ -115,11 +115,18 @@ def signin():
                     session['email'] = email
                     session['company'] = idCompany
                     
+                    #Obtiene hora actual
+                    DT = datetime.now()
+                    currentDate = DT.strftime('%d/%m/%Y')
+                    currentTime = DT.strftime("%X")
+
+                    #Ejecuta funcion que compurba si los funcionarios asistieron.
+                    absences.attendanceControl(idCompany, currentDate, currentTime)
+
                     # Ejecuta el metodo index
                     # return redirect(url_for('index'))
                     return "Bienvenido usuario Administrador"
                 elif rol == 2:
-
                     #Obtiene el id del usuario que se esta iniciando  sesion
                     idPersonal = personal.search_id_personal(email)
 
@@ -127,10 +134,10 @@ def signin():
                     session['email'] = email
                     session['personal'] = idPersonal
                     
-                    return "Bienvenido usuario Personal"
+                    return "Bienvenido usuario Personal", 200
 
             else:
-                return 'Usuario o contrasña incorrecto'
+                return 'Usuario o contrasña incorrecto', 412
         
         else: 
             return validation_form()
@@ -186,18 +193,23 @@ def register_personal():
 
         if validation_form() == True:
             #Consulta si el usuario ya esta registrado.
-            if auth.search_user(email) == True:
-                return "Usuario registrado", 412
+            if auth.search_user(email):
+                return "Usuario ya esta registrado", 412
             else:
                 #Se verifica que el usuario administrador tenga iniciado sesion
                 if 'email' in session:
                     idCompany = session['company']
 
-                    # Crea usuario y retorna el id
-                    idUser=  auth.create_user(email, password, idRol)
-                    # Registra datos del empleado
-                    personal.register_personal(document, name, lastname, gender, birthday, phone, address, idUser, idCompany)
-                    return "Usuario registrado Correctamente", 200
+                    if personal.get_id_personal(document, idCompany):
+                        return "Empleado ya registrado en la planilla", 412
+                    else:
+                        
+                        # Crea usuario y retorna el id
+                        idUser=  auth.create_user(email, password, idRol)
+
+                        # Registra datos del empleado
+                        result = personal.register_personal(document, name, lastname, gender, birthday, phone, address, idUser, idCompany)
+                        return result
                 else:
                     return "Debe iniciar sesion", 412
 
@@ -206,25 +218,29 @@ def register_personal():
 
 
 
-#Api lista de empleados
-@app.route('/all_personal/<idCompany>')
-def get_all_personal(idCompany):
+#API empelados: Obtiene todos los empleados de la empresa
+@app.route('/all_personal')
+def get_all_personal():
+    idCompany =  request.args.get("idCompany")
+
     allPersonal = personal.get_all_personal(idCompany)
 
     if len(allPersonal) == 0:
-      return "No hay registros de personal" 
+        return jsonify("No hay registro de personal") 
     else:
         return jsonify(allPersonal)
 
 
-#Api empleado por id
-@app.route('/personal/<idPersonal>')
-def get_personal(idPersonal):
-    employee = personal.get_personal(idPersonal)
-    if len(employee) == 0:
-        return "No hay registro"
+#API Empleado: Obtiene los datos de un empleado
+@app.route('/personal')
+def get_personal():
+    idPersonal =  request.args.get("idPersonal")
+
+    result = personal.get_personal(idPersonal)
+    if len(result) == 0:
+        return jsonify('No hay registro'), 412
     else:
-        return jsonify(employee)
+        return jsonify(result)
 
 
 #Elimna empleado de la base de datos
@@ -283,17 +299,14 @@ def insert_schedule():
 #Marcar hora de entrada
 @app.route('/mark_start', methods=['POST'])
 def insert_mark_start():
-    
-
-    
 
     #Se verifica que sea un metods POST
     if request.method == 'POST':
 
         #Se obtiene la hora y la fecha
         DT = datetime.now()
-        hour = DT.strftime("%X")
-        date = DT.strftime("%x")
+        currentTime = DT.strftime("%X")
+        date = DT.strftime('%d/%m/%Y')
 
         #Se verifica que el usuario ese en session
         if 'personal' in session:
@@ -301,12 +314,12 @@ def insert_mark_start():
 
             #se valida el formulario
             def validation_form():
-                if hour == '':
+                if currentTime == '':
                     return 'La hora no es correcta', 412
                 return  True
         
             if validation_form() == True:
-                    result = mark.insert_mark_start(idPersonal, hour, date)
+                    result = mark.insert_mark_start(idPersonal, currentTime, date)
                     return result
         else:
             return 'Debe iniciar sesion', 412
@@ -320,8 +333,8 @@ def insert_mark_end():
     if request.method == 'POST':
         #Se obtiene la hora y la fecha
         DT = datetime.now()
-        hour = DT.strftime("%X")
-        date = DT.strftime("%x")
+        currentTime = DT.strftime("%X")
+        date = DT.strftime('%d/%m/%Y')
         #Se verifica que el usuario ese en session
         if 'personal' in session:
             #Se obtienen los datos de formularoi
@@ -329,13 +342,12 @@ def insert_mark_end():
 
             #se valida el formulario
             def validation_form():
-                if hour == '':
+                if currentTime == '':
                     return 'La hora no es correcta', 412
                 return  True
         
             if validation_form() == True:
-                print(idPersonal, hour, date)
-                result = mark.insert_mark_end(idPersonal, hour, date)
+                result = mark.insert_mark_end(idPersonal, currentTime, date)
                 return result
         else:
             return 'Debe iniciar sesion', 412
@@ -345,30 +357,119 @@ def insert_mark_end():
 #Indicar dias libres
 @app.route('/insert_absence', methods=['POST'])
 def insert_absence():
-    #Se verifica que sea metodo POST
-    if request.method == 'POST':
-        #Se obtiene los datos
-        startDate = request.form['startDate']
-        endDate = request.form['endDate']
-        reason = request.form['reason']
-        idPersonal = request.form['idPersonal']
+    try:
+        #Se verifica que sea metodo POST
+        if request.method == 'POST':
+
+            #Se obtiene los datos
+            dateAbsence = request.form['dateAbsence']
+            reason = request.form['reason']
+            idPersonal = request.form['idPersonal']
+            
+            #se valida el formulario
+            def validation_form():
+                if dateAbsence == '':
+                    return 'Debe indicar indicar fecha de falta', 412
+                if reason == '':
+                        return 'Debe indicar motivo', 412
+                return True
+
+            if validation_form() == True:
+
+                result = absences.insert_absence(idPersonal, dateAbsence, reason)
+
+                return result
+    except:
+        return "No se pudo agregar ausencia", 412
+
+#Eliminar registro de ausencia
+@app.route('/delete_absence/<idAbsence>', methods=['DELETE'])
+def delete_absence(idAbsence):
+    if request.method == 'DELETE':
+        result = absences.delete_absence(idAbsence)
+        return result
+
+#Actualizar dias de ausencia
+@app.route('/update_absence/<idAbsence>', methods=['PUT'])
+def update_absence(idAbsence):
+    
+    dateAbsence = request.form['dateAbsence']
+    reason = request.form['reason']
+
+    if request.method == 'PUT':
+        result =  absences.update_absence(idAbsence, dateAbsence, reason)
+        return result
+
+
+#API AUSENCIAS: Obtiene ausencias por fecha
+@app.route('/get_absence_by_date', methods=['GET'])
+def get_absence_by_date():
+    if request.method == "GET":
+        startDate =  request.args.get("startDate")
+        endDate =  request.args.get("endDate")
+
+        result = absences.get_absence_by_date(startDate, endDate)
+        if result == []:
+            return "No hay registros de ausencias", 412
+        else:
+            return jsonify(result)
+
+#API marcas: Obtiene todas las marcas de un empleado en un periodo 
+@app.route('/get_mark', methods=['GET'])
+def get_mark():
+
+    if request.method == 'GET':
+        document =  request.args.get("document")
+        startDate =  request.args.get("startDate")
+        endDate =  request.args.get("endDate")
+        idCompany = request.args.get('idCompany')
+        result = mark.get_mark(document, startDate, endDate, idCompany)
         
-         #se valida el formulario
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify('No se encontraron datos')
+
+
+#Ingresa marcas manualmente, solo para usuarios con rol administrador
+@app.route('/insert_marks', methods=['POST'])
+def insert_marks():
+    if request.method == 'POST':
+        
+        hourStart = request.form['hourStart']
+        hourEnd = request.form['hourEnd']
+        idPersonal = request.form['idPersonal']
+        date = request.form['date']
+        
         def validation_form():
-            if startDate == '':
-                return 'Debe indicar fecha desde', 412
-            if endDate == '':
-                    return 'Debe indicar fecha hasta', 412
-            if reason == '':
-                    return 'Debe indicar motivo', 412
+            if hourStart == '':
+                return 'Debe indicar hora entrada', 412
+            if hourEnd == '':
+                return 'Debe indicar hora salida', 412
+            if idPersonal == '':
+                return 'Debe indicar idPersonal', 412
+            if date == '':
+                return 'Debe ingresar fecha', 412
             return True
 
         if validation_form() == True:
-          result = absences.insert_absence(idPersonal, startDate, endDate, reason)
-          return result
 
+            result = mark.insert_marks(idPersonal, hourStart, hourEnd, date)
 
+            return result
 
+        else:
+            return validation_form()
+
+#API Notificaciones
+@app.route('/get_notification')
+def get_notification():
+    if request.method == 'GET':
+        idCompany =  request.args.get("idCompany")
+        status =  request.args.get("document")
+
+        result = get_notification(idCompany, status)
+        return result
 
 
 if __name__ == '__main__':
