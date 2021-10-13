@@ -18,8 +18,8 @@ def insert_schedule(workStart, workEnd, idPersonal):
             INSERT INTO HORARIOS(HORA_ENTRADA, HORA_SALIDA)
             VALUES ('{workStart}','{workEnd}')
         """
-        bd = DataBase()
-        bd.ejecutar_sql(insert_schedule_sql)
+        db = DataBase()
+        db.ejecutar_sql(insert_schedule_sql)
 
         #Buscamos el id del registro
         search_shcedule_sql = f"""
@@ -33,5 +33,3 @@ def insert_schedule(workStart, workEnd, idPersonal):
 
         idSchedule = result[0][0]
         return model_personal.assign_time(idPersonal, idSchedule)
-
-

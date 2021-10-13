@@ -5,6 +5,7 @@ from services import personal
 from services import schedule
 from services import mark
 from services import absences
+from services import notification
 from datetime import datetime
 import os
 
@@ -272,7 +273,7 @@ def update_personal():
 
 
 #Asignar horario
-@app.route('/schedule', methods=['POST'])
+@app.route('/insert_schedule', methods=['POST'])
 def insert_schedule():
     if request.method == 'POST':
         workStart = request.form['workStart']
@@ -295,6 +296,7 @@ def insert_schedule():
             return result
         else:
             return validation_form()
+
 
 #Marcar hora de entrada
 @app.route('/mark_start', methods=['POST'])
@@ -355,8 +357,8 @@ def insert_mark_end():
 
 
 #Indicar dias libres
-@app.route('/insert_absence', methods=['POST'])
-def insert_absence():
+@app.route('/insert_authorized_absences', methods=['POST'])
+def insert_authorized_absences():
     try:
         #Se verifica que sea metodo POST
         if request.method == 'POST':
@@ -376,39 +378,43 @@ def insert_absence():
 
             if validation_form() == True:
 
-                result = absences.insert_absence(idPersonal, dateAbsence, reason)
+                result = absences.insert_authorized_absences(idPersonal, dateAbsence, reason)
 
                 return result
     except:
         return "No se pudo agregar ausencia", 412
 
+
 #Eliminar registro de ausencia
-@app.route('/delete_absence/<idAbsence>', methods=['DELETE'])
-def delete_absence(idAbsence):
+@app.route('/delete_authorized_absence/<idAbsence>', methods=['DELETE'])
+def delete_authorized_absence(idAbsence):
     if request.method == 'DELETE':
-        result = absences.delete_absence(idAbsence)
+        result = absences.delete_authorized_absence(idAbsence)
         return result
 
+
 #Actualizar dias de ausencia
-@app.route('/update_absence/<idAbsence>', methods=['PUT'])
-def update_absence(idAbsence):
+@app.route('/update_authorized_absence/<idAbsence>', methods=['PUT'])
+def update_authorized_absence(idAbsence):
     
     dateAbsence = request.form['dateAbsence']
     reason = request.form['reason']
-
+    
     if request.method == 'PUT':
-        result =  absences.update_absence(idAbsence, dateAbsence, reason)
+        result =  absences.update_authorized_absence(idAbsence, dateAbsence, reason)
         return result
 
 
-#API AUSENCIAS: Obtiene ausencias por fecha
-@app.route('/get_absence_by_date', methods=['GET'])
-def get_absence_by_date():
+#API AUSENCIAS: Obtiene ausencias progamadas, licenias, libres, etc
+@app.route('/get_authorized_absence', methods=['GET'])
+def get_authorized_absence():
     if request.method == "GET":
         startDate =  request.args.get("startDate")
         endDate =  request.args.get("endDate")
+        idCompany = request.args.get('idCompany')
 
-        result = absences.get_absence_by_date(startDate, endDate)
+
+        result = absences.get_authorized_absence(startDate, endDate, idCompany)
         if result == []:
             return "No hay registros de ausencias", 412
         else:
@@ -461,16 +467,74 @@ def insert_marks():
         else:
             return validation_form()
 
+
+
+
+#Actualiza marca ingresada por  id marca
+@app.route('/update_mark/<idMark>', methods=['PUT'])
+def update_mark(idMark):
+
+    if request.method == 'PUT':
+        hourStart = request.form['hourStart']
+        hourEnd = request.form['hourEnd']
+        idPersonal = request.form['idPersonal']
+
+        def validation_form():
+            if hourStart == '':
+                return 'Debe indicar hora entrada', 412
+            if hourEnd == '':
+                return 'Debe indicar hora salida', 412
+            if idPersonal == '':
+                return 'Debe indicar idPersonal', 412
+            if idMark == '':
+                return 'Debe ingresar id marca', 412
+            return True
+
+        if validation_form() == True:
+
+            result = mark.update_mark(idPersonal, hourStart, hourEnd, idMark)
+
+            return result
+
+        else:
+            return validation_form()
+
+
+
+
 #API Notificaciones
 @app.route('/get_notification')
 def get_notification():
     if request.method == 'GET':
         idCompany =  request.args.get("idCompany")
-        status =  request.args.get("document")
+        status =  request.args.get("status")
 
-        result = get_notification(idCompany, status)
-        return result
+   
+        result = notification.get_notification(idCompany, status)
+        
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify("No hay notificaciones pendientes")
 
+
+
+
+#API Ausencias: Obtiene las auencias del dia
+@app.route('/get_absences',methods=['GET'])
+def get_absences():
+    if request.method == 'GET':
+        startDate =  request.args.get("startDate")
+        endDate = request.args.get("endDate")
+        idCompany = request.args.get("idCompany")
+
+        result = mark.get_absences(startDate, endDate, idCompany)
+        
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify("No hay datos"), 412
+        
 
 if __name__ == '__main__':
     app.debug = True

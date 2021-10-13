@@ -2,9 +2,11 @@ from data.data_base import DataBase
 from datetime import datetime
 from data.models import model_personal
 from data.models import model_absences
+from data.models import model_notification
 
 #Registra hora de entrada en la base de datos
 def insert_mark_start(idPersonal, currentTime, date):
+
         #Consultamos si el funcionario ya marco la entrada del dia
         search_mark_sql =  f"""
                 SELECT * FROM MARCAS WHERE FECHA='{date}' AND ID_EMPLEADO='{idPersonal}'
@@ -40,21 +42,22 @@ def insert_mark_start(idPersonal, currentTime, date):
                                 return 'Marca entrada ingresda', 200
                 else:
                         #Si el empleado no tiene horario asignado, se guarda la incidencia en tabla notificaciones para que el usuario administrador, ingrese los datos manualmente y le asigne el horario laboral
-                        insert_notification_sql = f"""
-                                INSERT INTO NOTIFICACIONES(FECHA_NOTIFICACION, HORA, ASUNTO, DESCRIPCION, ID_EMPLEADO)
-                                VALUES ('{date}', '{currentTime}','Funcionario no tiene horario asignado','Ingresar marca de entrada manual','{idPersonal}')
-                        """
+                        subject = 'No tiene horario asigando'
+                        description = "Funcionario realizo marca de entrada y no tiene hroario asigando, asigne horario e ingrese la marcas manualmente"
+                        status = 'Pendiente'
+                        idCompany = get_id_company(idPersonal)
 
-                        db = DataBase()
-                        db.ejecutar_sql(insert_notification_sql)
-                        return "No tiene horario asignado, se informo al administrador", 200
+                        model_notification.insert_notification(date, currentTime, subject, description, status, idPersonal, idCompany)
+                        return 'No tiene horario asignado', 200
         else:
                 return 'Ya ingreso marca de entrada', 200
 
 
 #Registra hora de salida en la base de datos
 def insert_mark_end(idPersonal, currentTime, date):
-
+        #Otiene id empresa
+        idCompany = get_id_company(idPersonal)
+        print(idCompany)
         
         schedule = get_schedule(idPersonal)
         if schedule:
@@ -62,14 +65,12 @@ def insert_mark_end(idPersonal, currentTime, date):
                 try:
                         duration = calcDuration(idPersonal, currentTime, date)
                 except:
-                        #Si el funcionario no tiene horario asignado y el el administrador asigno el horario despues de la marca de entrada se notifica al administador para que ingrese marca de salida
-                        insert_notification_sql = f"""
-                                INSERT INTO NOTIFICACIONES(FECHA_NOTIFICACION, HORA, ASUNTO, DESCRIPCION, ID_EMPLEADO)
-                                VALUES ('{date}', '{currentTime}','Funcionario no tiene horario asignado','Ingresar marca de salida manual','{idPersonal}')
-                        """
+                        subject = 'No tiene horario asigando'
+                        description = "Funcionario realizo marca y no tiene hroario asigando"
+                        status = 'Pendiente'
+                        idCompany = get_id_company(idPersonal)
 
-                        db = DataBase()
-                        db.ejecutar_sql(insert_notification_sql)
+                        model_notification.insert_notification(date, currentTime, subject, description, status, idPersonal, idCompany)
                         return "No tiene horario asignado, se informo al administrador", 200
 
 
@@ -89,14 +90,12 @@ def insert_mark_end(idPersonal, currentTime, date):
                         db.ejecutar_sql(insert_mark_sql)
                         return 'Marca Salida ingresada', 200
         else:
-                #Si el empleado no tiene horario asignado, se guarda la incidencia en tabla notificaciones para que el usuario administrador, ingrese los datos manualmente y le asigne el horario laboral
-                insert_notification_sql = f"""
-                        INSERT INTO NOTIFICACIONES(FECHA_NOTIFICACION, HORA, ASUNTO, DESCRIPCION, ID_EMPLEADO)
-                        VALUES ('{date}', '{currentTime}','Funcionario no tiene horario asignado','Ingresar marca de salida manual','{idPersonal}')
-                """
+                subject = 'No tiene horario asigando'
+                description = "Funcionario realizo marca de salida y no tiene hroario asigando, asigne horario e ingrese marca manualmente"
+                status = 'Pendiente'
+                idCompany = get_id_company(idPersonal)
 
-                db = DataBase()
-                db.ejecutar_sql(insert_notification_sql)
+                model_notification.insert_notification(date, currentTime, subject, description, status, idPersonal, idCompany)
                 return "No tiene horario asignado, se informo al administrador", 200
 
 
@@ -125,12 +124,11 @@ def get_id_schedule(idPersonal):
         """ 
         db = DataBase()
         result = db.ejecutar_sql(select_schedule_sql) 
-        idHorario = result[0][0]
         
-        if idHorario == None:
-                return False
+        if result:
+                return result[0][0]
         else:
-                return idHorario
+                return False
 
 #Obtiene horario de entrada y horario de salida
 def get_schedule(idPersonal):
@@ -156,13 +154,11 @@ def attendanceControl(idCompany, currentDate, currentTime):
 
                 # Se consulta hora de salida
                 schedule = get_schedule(idPersonal)
-
                 #Se consulta si tiene libre
                 absence = model_absences.get_absence_by_id(idPersonal, currentDate)
-                
                 #Se consulta si hay marca
                 mark = search_mark(idPersonal, currentDate)
-                
+                # print(absence[0][''] == currentDate)
                 if absence and mark == []:
                         #Se registra en incidencia libre
                         incidence = absence[0]['reason']
@@ -175,10 +171,6 @@ def attendanceControl(idCompany, currentDate, currentTime):
                         if currentTime > schedule[0][2]:
                                 incidence = "Falta"
                                 insert_incidence(idPersonal, incidence, currentDate)
-                                
-                else:
-                        return 'Se debe asignar horario al funcionario', idPersonal
-
                 
                 
 #Consulta si hay marca ingresada
@@ -292,10 +284,78 @@ def insert_marks(idPersonal, hourStart, hourEnd, date):
 
 
 
+
+
+
+
+#Actualiza marcas ya registradas
+def update_mark(idPersonal, hourStart, hourEnd, idMark):
+        duration = calcDurationMark(hourStart, hourEnd)
+      
+        schedule = get_schedule(idPersonal)
+        if schedule:
+                #Calcuala si el empleado marco despues de la hora de entrada o antes de la hora de salida
+                scheduleHourStart = schedule[0][1]
+                scheduleHourEnd = schedule[0][2]
+                incidenceStart = incident_hour_start(hourStart, scheduleHourStart)
+                incidenceEnd = incident_hour_end(hourEnd, scheduleHourEnd)
+
+                insert_mark_sql = f"""
+                        UPDATE MARCAS SET HORA_ENTRADA='{hourStart}', HORA_SALIDA='{hourEnd}', DURACION='{duration}', INCIDENCIA_ASISTENCIA='Asistio',INCIDENCIA_HORARIO_ENTRADA='{incidenceStart}', INCIDENCIA_HORARIO_SALIDA='{incidenceEnd}' WHERE ID_MARCA='{idMark}'
+                """
+                db = DataBase()
+                result = db.ejecutar_sql(insert_mark_sql)
+                print(result)
+                return 'Marcas ingresadas', 200
+        else:
+                return 'No tiene horario asignado', 412
+
 #Calcula duracion cuando se ingersa marca manual
 def calcDurationMark(hourStart, hourEnd):
         
         FMT = '%H:%M'
         result = datetime.strptime(hourEnd, FMT) - datetime.strptime(hourStart, FMT)
         return result
-        
+
+
+#Obtiene id empresa
+def get_id_company(idPersonal):
+        select_company_sql =  f"""
+                SELECT ID_EMPRESA FROM EMPLEADOS WHERE ID_EMPLEADO='{idPersonal}'
+        """ 
+        db = DataBase()
+        result = db.ejecutar_sql(select_company_sql) 
+
+        if result:
+                return result[0][0]
+        else:
+                return []
+
+
+
+#Obtiene faltas
+def get_absences(startDate, endDate, idCompany):
+
+        employees = model_personal.get_all_personal(idCompany)
+        absences = []
+
+        for employee in employees:
+                idPersonal = employee['idPersonal']
+
+
+                select_absence_sql =  f"""
+                        SELECT * FROM MARCAS WHERE INCIDENCIA_ASISTENCIA='Falta' AND FECHA BETWEEN '{startDate}' AND '{endDate}' AND ID_EMPLEADO='{idPersonal}'
+                """ 
+                db = DataBase()
+
+                for absence in db.ejecutar_sql(select_absence_sql):
+                        dict_absence = {
+                        'idFalta': absence[0],
+                        'fecha': absence[3],
+                        'incidenciaAsistencia': absence[5],
+                        'idEmpleado': absence[8]
+                        }
+
+                        absences.append(dict_absence)
+        return absences
+

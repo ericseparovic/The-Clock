@@ -1,22 +1,23 @@
 from data.data_base import DataBase
+from data.models import model_personal
 
 #Asigna ausencias programadas, licencias, libres
-def insert_absence(idPersonal, dateAbsence, reason):
+def insert_authorized_absences(idPersonal, dateAbsence, reason):
     try:
         #Buscamos si el funcionario ya tine registrado dia libre
         search_absence_sql = f"""
             SELECT ID_AUSENCIA FROM AUSENCIAS WHERE FECHA_AUSENCIA='{dateAbsence}' AND ID_EMPLEADO='{idPersonal}'
         """
-        bd = DataBase()
-        result = bd.ejecutar_sql(search_absence_sql)
+        db = DataBase()
+        result = db.ejecutar_sql(search_absence_sql)
         
         if result == []:
-            insert_absence_sql = f"""
+            insert_authorized_absences_sql = f"""
                 INSERT INTO AUSENCIAS(FECHA_AUSENCIA, MOTIVO, ID_EMPLEADO)
                 VALUES ('{dateAbsence}','{reason}', '{idPersonal}')
             """
-            bd = DataBase()
-            bd.ejecutar_sql(insert_absence_sql)
+            db = DataBase()
+            db.ejecutar_sql(insert_authorized_absences_sql)
         
             return "Se registro ausencia", 200
         else: 
@@ -25,7 +26,7 @@ def insert_absence(idPersonal, dateAbsence, reason):
         return "Error al registrar datos", 412
 
 #Eliminar registro de ausencia
-def delete_absence(idAbsence):
+def delete_authorized_absence(idAbsence):
 
     try:
         delete_absence_sql = f"""
@@ -41,40 +42,48 @@ def delete_absence(idAbsence):
 
 
 #Actualizar fechas ausencia
-def update_absence(idAbsence, dateAbsence, reason):
+def update_authorized_absence(idAbsence, dateAbsence, reason):
     try:
-        update_personal_sql = f"""
+        update_absence_sql = f"""
             UPDATE AUSENCIAS SET FECHA_AUSENCIA='{dateAbsence}', MOTIVO='{reason}' WHERE ID_AUSENCIA='{idAbsence}'
             """
         db = DataBase()
-        db.ejecutar_sql(update_personal_sql)
+        db.ejecutar_sql(update_absence_sql)
         return "Se actualizaron los datos", 200
     except:
         return "No se pudieron actualizar datos", 412
 
-#Obtener ausencias por rango de fechas
-def get_absence_by_date(startDate, endDate):
-    select_absence = f"""
-        SELECT * 
-        FROM AUSENCIAS 
-        WHERE  FECHA_AUSENCIA BETWEEN '{startDate}' AND '{endDate}' ORDER BY FECHA_AUSENCIA 
-    """
-    db = DataBase()
+
+#API Obtener ausencias por rango de fechas
+def get_authorized_absence(startDate, endDate, idCompany):
+    #Obtiene todos los empleados de la empresa
+    employees = model_personal.get_all_personal(idCompany)
     absences = []
 
-    for abcence in db.ejecutar_sql(select_absence):
-        dict_absence = {
-            'idAbcence': abcence[0],
-            'dateAbsence': abcence[1],
-            'reason': abcence[2],
-            'idPersonal': abcence[3]
-        }
+    for employee in employees:
+        idPersonal = employee['idPersonal']
+    
 
-        absences.append(dict_absence)
+        select_absence = f"""
+            SELECT * 
+            FROM AUSENCIAS 
+            WHERE  FECHA_AUSENCIA BETWEEN '{startDate}' AND '{endDate}' AND ID_EMPLEADO='{idPersonal}' ORDER BY FECHA_AUSENCIA 
+        """
+        db = DataBase()
+
+        for abcence in db.ejecutar_sql(select_absence):
+            dict_absence = {
+                'idAbcence': abcence[0],
+                'dateAbsence': abcence[1],
+                'reason': abcence[2],
+                'idPersonal': abcence[3]
+            }
+
+            absences.append(dict_absence)
     return absences
    
 
-
+#Obtiene aucencias de un empleado por id
 def get_absence_by_id(idPersonal, currentDate):
     select_absence = f"""
         SELECT * 
