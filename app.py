@@ -13,15 +13,16 @@ app = Flask(__name__)
 
 app.config.update(SECRET_KEY=os.urandom(24))
 
+#Login empresas
+@app.route('/')
+def login_company():
+    return render_template('login_company.html')
+
 #Ruta registro de empresas
 @app.route('/register_company')
 def register_company():
     return render_template("register_company.html")
 
-#Login empresas
-@app.route('/')
-def login_company():
-    return render_template('login_company.html')
 
 #Login personal
 @app.route('/login_personal')
@@ -89,7 +90,7 @@ def signin():
 
         email = request.form['email']
         password = request.form['password']
-
+    
        #Valida que el formulario no este vacio
         def validation_form():
             if email == "":

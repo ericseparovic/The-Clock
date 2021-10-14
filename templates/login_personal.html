@@ -1,19 +1,24 @@
 {% extends 'layout.html' %}
 {% block body %}
-<main class="main">
-    <section class="main-img">
+<main class="main_login">
+    <div class="main_login__box">
+        </section>
+        <section class="main_login__img">
 
-    </section>
-    <section class="main-form">
-        <h1>The Clock</h1>
-        <p class="error">Usuario o contraseña incorrecto</p>
-        <form action="">
-            <input type="text" id="user" placeholder="Ingrese usuario">
-            <input type="text" id="password" placeholder="Ingrese Contraseña">
-            <input type="submit" value="Ingresar" id="btn">
-            <hr>
-            <a href="#">Recuperar contraseña</a>
-        </form>
-    </section>
+        </section>
+        <section class="main_login__form">
+            <h1>The Clock</h1>
+            <h2>Empleado</h2>
+            <p class="error">Usuario o contraseña incorrecto</p>
+            <form action="">
+                <input type="text" id="user" placeholder="Ingrese usuario">
+                <input type="text" id="password" placeholder="Ingrese Contraseña">
+                <input type="submit" value="Ingresar" id="btn">
+                <a href="/">Empresa/Administrador</a>
+                <hr>
+                <a href="#">Recuperar contraseña</a>
+            </form>
+        </section>
+    </div>
 </main>
 {% endblock body %}

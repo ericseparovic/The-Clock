@@ -1,102 +1,176 @@
+/**********Inicio Estilos Generales**********/
 html {
-  font-size: 62.5%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 62.5%;
+  }
+  *, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
 }
 
 body {
-  background-color: #4e73df;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-family: "Open Sans", sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+/**********Fin Estilos Generales **********/
+
+/* ----------------------------------------------------- */
+
+/**********Inicio Variables**********/
+:root {
+    --blue: #4e73df; 
+    --font-family: 'Open Sans', sans-serif;
 }
 
-.main {
-  background-color: white;
-  display: flex;
-  flex-wrap: wrap;
-  height: 50rem;
-  max-width: 90rem;
-  width: 70%;
-  border-radius: 1rem;
-  box-shadow: 2px 0px 22px 0px rgba(40, 30, 30, 0.75);
-  -webkit-box-shadow: 2px 0px 22px 0px rgba(40, 30, 30, 0.75);
-  -moz-box-shadow: 2px 0px 22px 0px rgba(40, 30, 30, 0.75);
+/**********Fin Variables**********/
+
+/* ---------------------------------------------------- */
+
+/*Inicio Estilos Login Empresas */
+.main_login {
+    background-color: var(--blue);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-family);
 }
-.main .main-img, .main .main-form {
-  flex: 1;
-  padding: 4rem;
+
+
+
+.main_login__box {
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    height: 50rem;
+    max-width: 90rem;
+    width: 70%;
+    border-radius: 1rem;
 }
-.main .main-form h1 {
-  text-align: center;
-  margin-bottom: 5rem;
-  color: #474646;
+
+.main_login__img, .main_login__form {
+    flex: 1;
+    padding: 4rem;
+
 }
-.main .main-form .error {
-  color: red;
-  font-size: 1.4rem;
-  text-align: center;
-  visibility: hidden;
+
+
+.main_login__form h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0px;
+    margin-top: 0px;
+    color: rgb(71, 70, 70);
+    font-size: 4rem;
 }
-.main .main-form form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 70%;
+
+.main_login__form h2 {
+    text-align: center;
+    color: rgb(71, 70, 70);
+    font-size: 2rem;
 }
-.main .main-form form input[type=text] {
-  width: auto;
-  height: 2rem;
-  font-size: 1.4rem;
-  border-radius: 2rem;
-  border: rgba(0, 0, 0, 0.39) 1px solid;
-  outline: 0;
-  padding: 1rem;
-  background-color: white;
+
+
+.main_login__form form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 70%;
+
 }
-.main .main-form form input[type=submit] {
-  width: auto;
-  height: 4rem;
-  font-size: 1.4rem;
-  border-radius: 2rem;
-  padding: 1rem;
-  background-color: #4e73df;
-  color: white;
-  outline: 0;
-  border: rgba(0, 0, 0, 0.1) 0 solid;
-  cursor: pointer;
+
+.main_login__form input[type="text"] {
+        width: auto;
+        height: 4rem;
+        font-size: 1.4rem;
+        border-radius: 2rem;
+        border: rgba(0, 0, 0, 0.39) 1px solid;
+        outline: 0;
+        padding: 1rem;
+        background-color: white;
 }
-.main .main-form form input[type=submit]:active {
-  background-color: #2e4da8;
+
+.main_login__form input[type="submit"] {
+   
+        width: auto;
+        height: 4rem;
+        font-size: 1.4rem;
+        border-radius: 2rem;
+        padding: 1rem;
+        background-color: var(--blue);
+        color: white;
+        outline: 0;
+        border: rgba(0,0,0,.1) 0 solid;
+        cursor: pointer;
 }
-.main .main-form form hr {
-  width: 100%;
-  height: 1px;
-  border: 0;
-  background-color: rgba(0, 0, 0, 0.1);
+
+.main_login__form input[type="button"] {
+   
+    width: auto;
+    height: 4rem;
+    font-size: 1.4rem;
+    border-radius: 2rem;
+    padding: 1rem;
+    background-color: var(--blue);
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
 }
-.main .main-form form a {
-  text-decoration: none;
-  font-size: 1.3rem;
-  color: #4e73df;
-  text-align: center;
+
+.main_login__form input[type="submit"]:active {
+    background-color: #2e4da8;
 }
-.main .main-img {
-  background-image: url(/static/img/pexels-andrea-piacquadio-845451.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position-x: right;
-  border-radius: 1rem 0 0 1rem;
+
+.main_login__form input[type="button"]:active {
+    background-color: #2e4da8;
+}
+
+hr {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background-color: rgba(0,0,0,.1);
+}
+    
+
+a {
+    text-decoration: none;
+    font-size: 1.3rem;
+    color: var(--blue);
+    text-align: center;
+}
+
+
+.main_login .main_login__img{
+    background-image: url(/static/img/pexels-andrea-piacquadio-845451.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: right;
+    border-radius: 1rem 0 0 1rem;
+}
+
+.error {
+    color: red;
+    font-size: 1.2rem;
+    text-align: center;
+    visibility: hidden;
 }
 
 @media screen and (max-width: 860px) {
-  .main {
-    flex-direction: column;
-    max-width: 40rem;
+    .main_login {
+        flex-direction: column;
+        max-width: 40rem;
+        
+        
+    }
+    .main_login__img {
+        display: none;
+    }
   }
-  .main .main-img {
-    display: none;
-  }
-}
 
-/*# sourceMappingURL=style.css.map */
+/*Fin Estilos Login Empresas */
+/* ----------------------------------------------------- */
