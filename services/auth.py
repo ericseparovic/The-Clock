@@ -11,3 +11,19 @@ def search_user(email):
 #Consulta si el usuario esta registrado
 def login_user(email, password):
     return model_user.login_user(email, password)
+
+
+#Valida que el fomrmulario no este vacio
+def validation_form(name, tel, email, password, passwordRepeat):
+    if name == "":
+        return 'Nombre es requerido', 412
+    if tel == "":
+        return 'Telefono es requerido', 412
+    if email == "":
+        return 'Correo es requerido', 412
+    if password == "":
+        return 'Clave es requerida', 412
+    if password != passwordRepeat:
+        return 'Las contraseñas deben ser iguales', 412
+    return True
+        

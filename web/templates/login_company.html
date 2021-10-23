@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/login_company.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>The Clock</title>
+</head>
+
+<body>
+
+    <main class="main_login">
+        <div class="main_login__box">
+            </section>
+            <section class="main_login__img">
+    
+            </section>
+            <section class="main_login__form">
+                <h1>The Clock</h1>
+                <h2>Empresa</h2>
+                <p class="emptyFieldsError">Ingrese usuario y contraseña</p>
+                <form action="" method="POST">
+                    <input type="text" name="email" id="user" placeholder="Ingrese usuario">
+                    <input type="text" name="password" id="password" placeholder="Ingrese Contraseña">
+                    <input type="submit" value="Ingresar" id="btn">
+                    <a href="login_personal" id="btn_login_personal">Empleado</a>
+                    <hr>
+                    <a href="#">Recuperar contraseña</a>
+                    <a href="http://127.0.0.1:5005/register_company">Registrarse</a>
+                </form>
+            </section>
+        </div>
+    </main>
+    <!-- <script src="{{url_for('static', filename='js/login.js')}}"></script> -->
+</body>
+
+</html>

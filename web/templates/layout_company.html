@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <title>The Clock</title>
+</head>
+
+<body>
+    <div class="container_company">
+        <!-- Sidebar -->
+        <nav class="nav_company">
+            <h1>The Clock</h1>
+            <hr>
+            <ul>       
+
+                <li>  
+                    
+                    <a href="#">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reporte</span>
+                    </a>
+                </li>
+                <hr>
+                <li class="employee">
+                        
+                    <a href="#">
+                        <i class="fas fa-users"></i>
+                        <span>Empleados</span> 
+                    </a>
+                    <i class="fas fa-chevron-down"></i>
+                </li>
+                <li class="sub_menu active">
+                    <ul >
+                        <li>   
+                            <a id="register_personal" href="http://127.0.0.1:5005/register_personal">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Registrar empleado</span>
+                            </a>
+                        </li>
+                        <li>  
+                            <a id="lista_empleados" href="http://127.0.0.1:5005/list_of_employees">
+                                <i class="fas fa-list"></i>
+                                <span>Lista de Empleados</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user-clock"></i>
+                                <span>Asignar Horario</span></a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user-check"></i>
+                                <span>Asignar Libre</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <hr>
+                <li>  
+                    
+                    <a href="#">
+                        <i class="fas fa-clock"></i>
+                        <span>Horario</span>
+                    </a>
+                </li>
+                <hr>
+                <li>  
+                    
+                    <a href="#">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Libres</span>
+                    </a>
+                </li>
+                <hr>
+            </ul>
+        </nav>
+        <!-- Container header main -->
+        <div class="container_header_main">       
+            <header class="header_company">
+                <i class="fas fa-bars" id="btnBars"></i>
+                <div class="header_company_container_perfil">
+                    <i class="fas fa-bell"></i>
+                    <div class="header_company_border"></div>
+                    <a href="#" class="header_company_perfil">
+                        <span>Eric Separovic</span>
+                        <img src="{{url_for('static', filename='img/perfil-del-usuario.png')}}" alt="">
+                    </a>
+                </div>
+            </header>
+            <main class="main_company">
+
+            {% block main %}
+
+            {% endblock %}
+
+            </main>
+
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/8e93da113d.js" crossorigin="anonymous"></script>
+    <script src="{{url_for('static', filename='js/sidebar.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        } );    
+    </script>
+</body>
+
+</html>

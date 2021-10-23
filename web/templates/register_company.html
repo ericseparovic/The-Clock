@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/register_company.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>The Clock</title>
+</head>
+
+<body>
+    <main class="container">
+            <section class="img-register-company">
+    
+            </section>
+            <section class="container-form">
+                <h1>The Clock</h1>
+                <h2>Registrarse</h2>
+                <div class="container-error">
+                    <p class="errorFront"></p>
+                    {% if error %}
+                    <p class="errorBack">{{error}}</p>
+                    {% endif %}
+                </div>
+
+                <form action="" method="POST">
+                    <input type="text" name="name" id="name" placeholder="Nombre empresa">
+                    <input type="tel" name="tel" id="tel" placeholder="Telefono">
+                    <input type="email" name="email" id="email" placeholder="Correo">
+                    <input type="password" name="password" id="password" placeholder="Clave">
+                    <input type="password" name="passwordRepeat" id="passwordRepeat" placeholder="Repetir Clave">
+        
+                    <input type="submit" value="Registrarse" id="btn">
+                    <hr>
+                    <a href="/" id="btn_login">Iniciar Sesion</a>
+                </form>
+            </section>
+    </main>
+    <script src="/static/js/register_company.js"></script>
+</body>
+
+</html>

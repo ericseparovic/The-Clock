@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
+from werkzeug.wrappers.request import PlainRequest
 from services import auth
 from services import company
 from services import personal
@@ -13,90 +14,57 @@ app = Flask(__name__)
 
 app.config.update(SECRET_KEY=os.urandom(24))
 
-#Login empresas
-@app.route('/')
-def login_company():
-    return render_template('login_company.html')
-
-#Ruta registro de empresas
-@app.route('/register_company')
-def register_company():
-    return render_template("register_company.html")
-
-
-#Login personal
-@app.route('/login_personal')
-def login_personal():
-    return render_template("login_personal.html")
-
-@app.route('/index_company')
-def index_company():
-    if 'company' in session:
-        return render_template('index_company.html')
-    else:
-        return  redirect(url_for('login_company'))
-
-
-
 
 #Se ejecuta al registrar la empresa, se guarda los datos del usuario en la tabla usuarios y se guarda los datos de la empresa en la tabla empresas
 @app.route('/signup', methods=["POST", "GET"])
 def signup():
 
     if request.method == 'POST':
-        name = request.form['name']
-        phone = request.form['phone']
-        email = request.form['email']
-        password = request.form['password']
+        date_company = request.get_json()
+
+        name = date_company['name']
+        tel = date_company['tel']
+        email = date_company['email']
+        password = date_company['password']
+        passwordRepeat = date_company['passwordRepeat']
         idRol = 1
 
-        #Valida que el fomrmulario no este vacio
-        def validation_form():
-            if name == "":
-                return 'Nombre es requerido', 412
-            if phone == "":
-                return 'Telefono es requerido', 412
-            if email == "":
-                return 'Correo es requerido', 412
-            if password == "":
-                return 'Clave es requerida', 412
-            return True
-        
 
-        if validation_form() == True:
+        if auth.validation_form(name, tel, email, password, passwordRepeat) == True:
 
             #Consulta si el usuario ya esta registrado.
             if auth.search_user(email) == True:
-                return "Usuario ya esta registrado"
+                return "Usuario ya esta registrado", 412
             else:
+
                 #Registra los datos del usuario y retorna el id
                 idUser=  auth.create_user(email, password, idRol)
             
                 #Registra los datos de la empresa en la base de datos
-                company.register_company(name, phone, idUser)
+                company.register_company(name, tel, idUser)
 
-                return "Usuario registrado Correctamente", 200
+                return 'Usuario registrado correctamente', 200
             
         else:
-            return validation_form()
+            return auth.validation_form(name, tel, email, password, passwordRepeat)
 
 
 
 
 #Inicio de sesion para empresas y usuarios
-@app.route('/signin', methods=["POST", "GET"])
+@app.route('/signin', methods=["POST"])
 def signin():
     if request.method == 'POST':
-
+        
         email = request.form['email']
         password = request.form['password']
     
        #Valida que el formulario no este vacio
         def validation_form():
             if email == "":
-                return 'Correo es requerido', 412
+                return jsonify({'Correo es requerido': '412'})
             if password == "":
-                return 'Clave es requerida', 412
+                return jsonify({'Correo es requerido': '412'})
             return True
 
         if validation_form() == True:
@@ -125,9 +93,7 @@ def signin():
                     #Ejecuta funcion que compurba si los funcionarios asistieron.
                     absences.attendanceControl(idCompany, currentDate, currentTime)
 
-                    # Ejecuta el metodo index
-                    # return redirect(url_for('index'))
-                    return "Bienvenido usuario Administrador"
+                    return jsonify({'message': 'Bienvenido usuario', 'code': '200'})
                 elif rol == 2:
                     #Obtiene el id del usuario que se esta iniciando  sesion
                     idPersonal = personal.search_id_personal(email)
@@ -136,10 +102,10 @@ def signin():
                     session['email'] = email
                     session['personal'] = idPersonal
                     
-                    return "Bienvenido usuario Personal", 200
+                    return jsonify({'ok': '200'})
 
             else:
-                return 'Usuario o contrasña incorrecto', 412
+                return jsonify({'Usuario o contraseña incorrecto': '412'})
         
         else: 
             return validation_form()
@@ -148,7 +114,7 @@ def signin():
 #Cierra seccion del usuario
 @app.route('/logout', methods=["POST", "GET"])
 def logout():
-    if request.method == 'POST':
+    if request.method == 'GET':
         session.clear()
         return "Sesion Cerrada", 200
 
@@ -164,7 +130,7 @@ def register_personal():
         lastname = request.form['lastname']
         gender = request.form['gender']
         birthday = request.form['birthday']
-        phone = request.form['phone']
+        tel = request.form['tel']
         email = request.form['email']
         address = request.form['address']
         password = 12345678
@@ -180,7 +146,7 @@ def register_personal():
                 return 'Apellido es requerido', 412
             if gender == "":
                 return 'Genero es requerido', 412
-            if phone == "":
+            if tel == "":
                 return 'Telefono es requerido', 412
             if birthday == "":
                 return 'Fecha de nacimiento es requerido', 412
@@ -210,7 +176,7 @@ def register_personal():
                         idUser=  auth.create_user(email, password, idRol)
 
                         # Registra datos del empleado
-                        result = personal.register_personal(document, name, lastname, gender, birthday, phone, address, idUser, idCompany)
+                        result = personal.register_personal(document, name, lastname, gender, birthday, tel, address, idUser, idCompany)
                         return result
                 else:
                     return "Debe iniciar sesion", 412
@@ -264,11 +230,11 @@ def update_personal():
     lastname = request.form['lastname']
     gender = request.form['gender']
     birthday = request.form['birthday']
-    phone = request.form['phone']
+    tel = request.form['tel']
     address = request.form['address']
     idPersonal = request.form['id']
 
-    result = personal.update_personal(idPersonal, document, name, lastname, gender, birthday, phone, address)
+    result = personal.update_personal(idPersonal, document, name, lastname, gender, birthday, tel, address)
 
     return 'Datos Actulizados', 200
 

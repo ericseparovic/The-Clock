@@ -1,4 +1,4 @@
-/**********Inicio Estilos Generales**********/
+/**********INICIO ESTILOS GENERALES**********/
 html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -15,21 +15,31 @@ body {
     margin: 0px;
     padding: 0px;
 }
-/**********Fin Estilos Generales **********/
 
-/* ----------------------------------------------------- */
+h2 {
+    font-size: 2.5rem;
+    margin: 0;
+    padding: 0;
+    color: var(--blue);
+}
+/**********FIN ESTILOS GENERALES**********/
 
-/**********Inicio Variables**********/
+/******************************************************************************************/
+
+/**********INICIO ESTILOS VARIABLES**********/
 :root {
     --blue: #4e73df; 
+    --grey: #d1d3e2;
+    --grey_shadow:#aeafbb;
+    --grey_body:#d6d6da;
     --font-family: 'Open Sans', sans-serif;
 }
 
-/**********Fin Variables**********/
+/**********FIN ESTILOS VARIABLES**********/
 
-/* ---------------------------------------------------- */
+/****************************************************************************/
 
-/*Inicio Estilos Login Empresas */
+/**********INICIO ESTILOS LOGIN EMPRESA**********/
 .main_login {
     background-color: var(--blue);
     height: 100vh;
@@ -60,29 +70,37 @@ body {
 
 .main_login__form h1 {
     text-align: center;
-    margin-bottom: 2rem;
     padding: 0px;
     margin-top: 0px;
     color: rgb(71, 70, 70);
     font-size: 4rem;
+    color: var(--blue);
 }
 
 .main_login__form h2 {
     text-align: center;
     color: rgb(71, 70, 70);
+    font-size: 1.5rem;
+    margin: 0px;
+    padding: 0px;
+    color: var(--grey_shadow);
     font-size: 2rem;
+
 }
 
 
 .main_login__form form {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     height: 70%;
 
 }
 
-.main_login__form input[type="text"] {
+.main_login__form input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
         width: auto;
         height: 4rem;
         font-size: 1.4rem;
@@ -107,27 +125,11 @@ body {
         cursor: pointer;
 }
 
-.main_login__form input[type="button"] {
-   
-    width: auto;
-    height: 4rem;
-    font-size: 1.4rem;
-    border-radius: 2rem;
-    padding: 1rem;
-    background-color: var(--blue);
-    color: white;
-    outline: 0;
-    border: rgba(0,0,0,.1) 0 solid;
-    cursor: pointer;
-}
 
-.main_login__form input[type="submit"]:active {
+.main_login__form input[type="submit"]:hover {
     background-color: #2e4da8;
 }
 
-.main_login__form input[type="button"]:active {
-    background-color: #2e4da8;
-}
 
 hr {
     width: 100%;
@@ -153,11 +155,19 @@ a {
     border-radius: 1rem 0 0 1rem;
 }
 
-.error {
+
+.emptyFieldsError{
     color: red;
     font-size: 1.2rem;
     text-align: center;
     visibility: hidden;
+    padding-top: 2rem;
+    font-weight: bold;
+}
+
+
+.main_login__form .h2Personal {   
+    margin-bottom: 4rem;
 }
 
 @media screen and (max-width: 860px) {
@@ -172,5 +182,4 @@ a {
     }
   }
 
-/*Fin Estilos Login Empresas */
-/* ----------------------------------------------------- */
+/**********FIN ESTILOS LOGIN EMPRESA**********/
