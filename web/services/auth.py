@@ -16,4 +16,12 @@ def create_user(name, tel, email, password, passwordRepeat):
     return response
 
 
-#Login empresa
+# #Login empresa
+# def login(email, password):
+#     body = {
+#         'email': email,
+#         'password': password,
+#     }
+
+#     response = requests.post(f'{rest_api.URL_API}/signin', json=body)
+#     return response

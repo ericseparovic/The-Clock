@@ -11,7 +11,7 @@ function getDateForm(e) {
     let email = form.get('email');
     let password = form.get('password');
     let passwordRepeat = form.get('passwordRepeat');
-    let messageError = document.querySelector('.errorFront');
+    let messageErrorFront = document.querySelector('.errorFront');
     let messageErrorBack = document.querySelector('.errorBack');
 
 
@@ -19,15 +19,18 @@ function getDateForm(e) {
 
     if(validationForm(name, tel, email, password, passwordRepeat) == true){
         //Limpiar errores y enviar datos al servidor
-        messageError.style.visibility = 'hidden';
+        messageErrorFront.style.visibility = 'hidden';
 
     } else {
         // Mostar error y detener envio de datos al seridor
         e.preventDefault();
-        messageError.innerHTML = error
-        messageError.style.visibility = 'visible';
-        messageErrorBack.style.visibility = 'hidden';
+        messageErrorFront.innerHTML = error
+        messageErrorFront.style.visibility = 'visible';
 
+        if(messageErrorBack != null) {
+            messageErrorBack.style.visibility = 'hidden';
+
+        }
     }
 }
 
