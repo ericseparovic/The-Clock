@@ -1,8 +1,10 @@
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify
-from werkzeug.wrappers import response
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify, Response
+import os
 from services import auth
 
 app = Flask(__name__)
+
+app.config.update(SECRET_KEY=os.urandom(24))
 
 
 
@@ -10,12 +12,28 @@ app = Flask(__name__)
 #Login empresas
 @app.route('/', methods=["GET", "POST"])
 def login_company():
+    error = None
     if request.method == 'POST':
-        print('holdsfds')
+        email = request.form['email']
+        password = request.form['password']
 
-        return render_template('login_company.html')
+        response = auth.login(email, password)
+
+        if response.status_code == 200:
+            session['logged_in'] = True
+            return redirect(url_for('home_company'))
+
+        if response.status_code == 412:
+            error = response.text
+            return render_template('login_company.html', error=error)
+
+        if response.status_code == 409:
+            error = response.text
+            return render_template('login_company.html', error=error)
+
     return render_template('login_company.html')
 
+    
 
 #Registro empresa
 @app.route('/register_company', methods=["GET", "POST"])

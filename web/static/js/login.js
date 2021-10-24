@@ -7,30 +7,41 @@ function getDateForm(e) {
     e.preventDefault();
 
     let form = new FormData(htmlForm)
-    let userName = form.get('email')
+    let email = form.get('email')
     let password = form.get('password')
+    let messageErrorFront = document.querySelector('.errorFront');
+    let messageErrorBack = document.querySelector('.errorBack');
 
-    let messageError = document.querySelector('.emptyFieldsError');
 
-    if(validationForm(userName, password) == false){
-        // Mostrar error
-        messageError.style.visibility = 'visible';
+
+
+    if(validationForm(email, password) == true){
+        //Limpiar errores y enviar datos al servidor
+        messageErrorFront.style.visibility = 'hidden';
+
     } else {
-        // Borrar error
-        messageError.style.visibility = 'hidden';
+        // Mostar error y detener envio de datos al seridor
+        e.preventDefault();
+        messageErrorFront.innerHTML = error
+        messageError.style.visibility = 'visible';
+        messageErrorBack.style.visibility = 'hidden';
+
     }
 }
 
 
+
 // Valida que los campos no esten vacios
-function validationForm(userName, password){
+function validationForm(email, password){
+    error = true
 
+    if(email == ""){
+        return error = "Email es requerido"
+    } 
 
-    if(userName == ""){
-        return false
-    } else if(password == "") {
-        return false
-    } else {
-        return true
+    if(password == ""){
+        return error = "Contraseña es requerida"
     }
+
+    return error
 }

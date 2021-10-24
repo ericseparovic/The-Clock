@@ -15,16 +15,20 @@
 
 <body>
 
-    <main class="main_login">
-        <div class="main_login__box">
+    <main class="main-login">
             </section>
-            <section class="main_login__img">
+            <section class="section-img-login">
     
             </section>
-            <section class="main_login__form">
+            <section class="section-form-login">
                 <h1>The Clock</h1>
                 <h2>Empresa</h2>
-                <p class="emptyFieldsError">Ingrese usuario y contraseña</p>
+                <div class="container-error">
+                    <p class="errorFront"></p>
+                    {% if error %}
+                    <p class="errorBack">{{error}}</p>
+                    {% endif %}
+                </div>
                 <form action="" method="POST">
                     <input type="text" name="email" id="user" placeholder="Ingrese usuario">
                     <input type="text" name="password" id="password" placeholder="Ingrese Contraseña">
@@ -35,9 +39,8 @@
                     <a href="http://127.0.0.1:5005/register_company">Registrarse</a>
                 </form>
             </section>
-        </div>
     </main>
-    <!-- <script src="{{url_for('static', filename='js/login.js')}}"></script> -->
+    <script src="{{url_for('static', filename='js/login.js')}}"></script>
 </body>
 
 </html>

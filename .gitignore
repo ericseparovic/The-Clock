@@ -1,2 +1,6 @@
 # ignore ALL files in ANY directory named temp
-env/
+venv/
+data/__pycache__
+data/models/__pycache__
+services/__pycache__
+web/services/__pycache__

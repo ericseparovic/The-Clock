@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
-from werkzeug.wrappers.request import PlainRequest
 from services import auth
 from services import company
 from services import personal
