@@ -4,7 +4,6 @@ let htmlForm = document.querySelector('form');
 htmlForm.addEventListener('submit', getDateForm)
 
 function getDateForm(e) {
-    e.preventDefault();
 
     let form = new FormData(htmlForm)
     let email = form.get('email')
@@ -23,8 +22,11 @@ function getDateForm(e) {
         // Mostar error y detener envio de datos al seridor
         e.preventDefault();
         messageErrorFront.innerHTML = error
-        messageError.style.visibility = 'visible';
-        messageErrorBack.style.visibility = 'hidden';
+        messageErrorFront.style.visibility = 'visible';
+        
+        if(messageErrorBack !== null){
+            messageErrorBack.style.visibility = 'hidden';
+        }
 
     }
 }

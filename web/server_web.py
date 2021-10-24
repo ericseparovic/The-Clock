@@ -16,7 +16,7 @@ def login_company():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-
+        
         response = auth.login(email, password)
 
         if response.status_code == 200:
