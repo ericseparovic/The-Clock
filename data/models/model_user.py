@@ -52,7 +52,4 @@ def login_user(email, password):
     db = DataBase()
     user = db.ejecutar_sql(select_id_usuario)
 
-    if len(user) == 0:
-        return False
-    else:
-        return user
+    return user

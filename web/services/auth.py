@@ -2,6 +2,8 @@ import requests
 
 from services import rest_api
 
+    
+
 #Crear usuario
 def create_user(name, tel, email, password, passwordRepeat):
     body = {
@@ -16,12 +18,12 @@ def create_user(name, tel, email, password, passwordRepeat):
     return response
 
 
-# #Login empresa
-# def login(email, password):
-#     body = {
-#         'email': email,
-#         'password': password,
-#     }
+#Login empresa
+def login(email, password):
+    body = {
+        'email': email,
+        'password': password,
+    }
 
-#     response = requests.post(f'{rest_api.URL_API}/signin', json=body)
-#     return response
+    response = requests.post(f'{rest_api.URL_API}/signin', json=body)
+    return response

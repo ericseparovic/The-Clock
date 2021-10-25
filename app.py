@@ -7,6 +7,8 @@ from services import mark
 from services import absences
 from services import notification
 from datetime import datetime
+
+
 import os
 
 app = Flask(__name__)
@@ -54,60 +56,76 @@ def signup():
 @app.route('/signin', methods=["POST"])
 def signin():
     if request.method == 'POST':
-        
-        email = request.form['email']
-        password = request.form['password']
+        date = request.get_json()
+
+        email = date['email']
+        password = date['password']
     
-       #Valida que el formulario no este vacio
-        def validation_form():
-            if email == "":
-                return jsonify({'Correo es requerido': '412'})
-            if password == "":
-                return jsonify({'Correo es requerido': '412'})
-            return True
+        #Validacion formulario, se verifican que los datos esten vacios
+        if auth.validation_form_login(email, password) == True:
+            #Primero se verifica si el usuario esta registrado
+            existsUser = auth.search_user(email)
 
-        if validation_form() == True:
+            if existsUser == False:
+                return 'Email no esta registrado', 409
+            if existsUser == True:
+                user = auth.login_user(email, password)
+                if user:
+                    rol = user[0][3]
+                    idUser = user[0][0]
+                    
+                    if rol == 1:
+                    # Obtiene el id de la empresa que se esta iniciando  sesion
+                        dataCompany = company.get_data_company(idUser)
+                        
+                        return jsonify(dataCompany), 200
+                else:
+                    return 'Contraseña incorrecta', 412
 
-            #Consulta en la base de datos si las credenciales son correctas 
-            user = auth.login_user(email, password)
+
+        else:
+            return auth.validation_form_login(email, password)
+
+        #     #Consulta en la base de datos si las credenciales son correctas 
+        #     user = auth.login_user(email, password)
          
 
-            #Si el usuario esta registrado se guarda la session en el catche del usuario
-            if user != False:
+        #     #Si el usuario esta registrado se guarda la session en el catche del usuario
+        #     if user != False:
 
-                rol = user[0][3]
-                if rol == 1:
-                    #Obtiene el id de la empresa que se esta iniciando  sesion
-                    idCompany = company.search_id_company(email)
+        #         rol = user[0][3]
+        #         if rol == 1:
+        #             #Obtiene el id de la empresa que se esta iniciando  sesion
+        #             idCompany = company.search_id_company(email)
 
-                    #se guardan los datos de la sesion, usuario y id
-                    session['email'] = email
-                    session['company'] = idCompany
+        #             #se guardan los datos de la sesion, usuario y id
+        #             session['email'] = email
+        #             session['company'] = idCompany
                     
-                    #Obtiene hora actual
-                    DT = datetime.now()
-                    currentDate = DT.strftime('%d/%m/%Y')
-                    currentTime = DT.strftime("%X")
+        #             #Obtiene hora actual
+        #             DT = datetime.now()
+        #             currentDate = DT.strftime('%d/%m/%Y')
+        #             currentTime = DT.strftime("%X")
 
-                    #Ejecuta funcion que compurba si los funcionarios asistieron.
-                    absences.attendanceControl(idCompany, currentDate, currentTime)
+        #             #Ejecuta funcion que compurba si los funcionarios asistieron.
+        #             absences.attendanceControl(idCompany, currentDate, currentTime)
 
-                    return jsonify({'message': 'Bienvenido usuario', 'code': '200'})
-                elif rol == 2:
-                    #Obtiene el id del usuario que se esta iniciando  sesion
-                    idPersonal = personal.search_id_personal(email)
+        #             return jsonify({'message': 'Bienvenido usuario', 'code': '200'})
+        #         elif rol == 2:
+        #             #Obtiene el id del usuario que se esta iniciando  sesion
+        #             idPersonal = personal.search_id_personal(email)
 
-                    #se guardan los datos de la sesion, usuario y id
-                    session['email'] = email
-                    session['personal'] = idPersonal
+        #             #se guardan los datos de la sesion, usuario y id
+        #             session['email'] = email
+        #             session['personal'] = idPersonal
                     
-                    return jsonify({'ok': '200'})
+        #             return jsonify({'ok': '200'})
 
-            else:
-                return jsonify({'Usuario o contraseña incorrecto': '412'})
+        #     else:
+        #         return jsonify({'Usuario o contraseña incorrecto': '412'})
         
-        else: 
-            return validation_form()
+        # else: 
+        #     return validation_form()
 
 
 #Cierra seccion del usuario

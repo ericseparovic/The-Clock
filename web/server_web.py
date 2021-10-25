@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify, Response
+from flask import Flask, json, request, render_template, redirect, url_for, session, jsonify, Response
 import os
 from services import auth
 
@@ -20,7 +20,13 @@ def login_company():
         response = auth.login(email, password)
 
         if response.status_code == 200:
+            data_company = response.json()
+        
             session['logged_in'] = True
+            session['idCompany'] = data_company['idCompany']
+            session['nameCompany'] = data_company['nameCompany']
+            session['idCompany'] = data_company['idCompany']
+
             return redirect(url_for('home_company'))
 
         if response.status_code == 412:
@@ -60,7 +66,13 @@ def register_company():
 
 
 
-
+#Home empresa
+@app.route('/home_company')
+def home_company():
+    if 'logged_in' in session:
+        nameCompany = session['nameCompany']
+        return render_template('layout_company.html', nameCompany=nameCompany)
+    return redirect(url_for('login_company'))
 
 
 

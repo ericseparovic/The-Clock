@@ -26,3 +26,24 @@ def search_id_company(email):
     idCompany = db.ejecutar_sql(select_id_company)
 
     return idCompany[0][0]
+
+#Obtiene datos de la empresa
+def get_data_company(idUser):    
+
+    select_id_company = f"""
+        SELECT * FROM EMPRESAS WHERE ID_USUARIO='{idUser}'
+    """ 
+    
+    db = DataBase()
+    data_company = db.ejecutar_sql(select_id_company)
+    
+        
+    dict_company = {
+        'idCompany': data_company[0][0],
+        'nameCompany': data_company[0][1],
+        'tel': data_company[0][2],
+        'idUser': data_company[0][3]
+    }
+
+    
+    return dict_company

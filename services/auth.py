@@ -27,3 +27,12 @@ def validation_form(name, tel, email, password, passwordRepeat):
         return 'Las contraseñas deben ser iguales', 412
     return True
         
+
+#Valida que el fomrmulario no este vacio y que el usuario exista
+def validation_form_login(email, password):
+    if email == "":
+        return 'Email es requerido', 412
+    if password == "":
+        return 'Contraseña es requerida', 412
+    return True
+        
