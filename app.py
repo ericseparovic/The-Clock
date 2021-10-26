@@ -128,14 +128,6 @@ def signin():
         #     return validation_form()
 
 
-#Cierra seccion del usuario
-@app.route('/logout', methods=["POST", "GET"])
-def logout():
-    if request.method == 'GET':
-        session.clear()
-        return "Sesion Cerrada", 200
-
-
 
 
 #Crea usuario en la tabla usuarios y guarda los datos del empleado en la tabla empleados

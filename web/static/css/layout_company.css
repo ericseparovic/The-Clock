@@ -18,12 +18,13 @@ html {
 body {
     margin: 0px;
     padding: 0px;
-    height: 100vh;
-    background-color: var(--blue);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-family: var(--font-family);
+    height: 100vh;
+}
+
+* {
+    list-style-type: none;
+    text-decoration: none;
 }
 
 
@@ -34,9 +35,9 @@ body {
 /**********INICIO ESTILOS VARIABLES**********/
 :root {
     --blue: #4e73df; 
-    --grey: #d1d3e2;
-    --grey_shadow:#aeafbb;
-    --grey_body:#d6d6da;
+    --grey: #aaaaaf;
+    --shadow:#e6e6ec;
+    --grey_body:#e7e7e9;
     --font-family: 'Open Sans', sans-serif;
 }
 
@@ -44,24 +45,185 @@ body {
 
 /****************************************************************************/
 
+/******************INICIO ESTILOS HEADERr********************/
 
-/******************Inicio estilos layout_company sidebar********************/
-.container_company {
-    font-family: var(--font-family);
+.header-company {
+    height: 7rem;
+    background-color: white;
+    padding: 2rem;
     display: flex;
-    width: 100%;
-    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.container_company .nav_company {
+
+.header-company .fa-bars {
+    font-size: 2rem;
+    color: var(--blue);
+    padding: 1rem;
+
+}
+
+.header-company .fa-bars:hover {
+    background-color: var(--shadow);
+    border-radius: 50%;
+}
+
+.header-company .header-company-container-perfil .header-company-border {
+    width: 0;
+    border-right: 2px solid var(--shadow);
+    height: 4rem;
+
+}
+
+.header-company .header-company-container-perfil {
+    display: flex;
+    justify-content: space-between;
+    color: var(--grey);
+    font-size: 1.5rem;
+    align-items: center;
+    width: 20rem;
+}
+
+.header-company .header-company-container-perfil {
+    display: flex;
+    justify-content: space-between;
+    color: var(--grey);
+    font-size: 1.5rem;
+    align-items: center;
+    width: 20rem;
+}
+
+.header-company .header-company-container-perfil a {
+    color: var(--grey);
+}
+
+
+.header-company .header-company-container-perfil .fa-bell:hover {
+    color: var(--blue);
+}
+
+.header-company  .header-company-perfil {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+
+.header-company  .header-company-perfil img {
+    width: 3rem;
+    margin-left: 2rem;
+}
+
+.header-company  .header-company-perfil span {
+    font-weight: bold;
+}
+
+.header-company  .header-company-perfil span:hover {
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    margin: 0px;
+}
+
+
+.header-title h1 {
+   color: var(--blue);
+   padding-left: 2rem;
+}
+
+.dropdown {
+    width: 18rem;
+    height: auto;
+    position: absolute;
+    right: 1rem;
+    top: 8rem;
+    border-radius: 1rem;
+    background-color: white;
+    box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8);
+    -webkit-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8);
+    -moz-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8); 
+}
+
+
+.dropdown ul {
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.3rem;
+}
+
+.dropdown hr {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background-color: rgba(0,0,0,.1);
+    margin: 0px;
+}
+
+.dropdown i {
+    color: var(--blue);
+    padding-right: 2rem;
+}
+
+.dropdown span {
+    color: var(--grey);
+}
+
+.dropdown li {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+}
+
+.dropdown-menu :nth-child(1):hover {
+    background-color:  var(--shadow);
+    border-radius: 1rem 1rem 0 0;
+}
+
+.dropdown-menu :nth-child(3):hover {
+    background-color:  var(--shadow);
+    border-radius: 0 0 1rem 1rem;
+}
+
+/*************************** FIN ESTILOS HEADER **********************/
+
+
+
+/*************************** INICIO ESTILOS SIDEBAR-MAIN **********************/
+
+.container-sidebar-main {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100%;
+
+}
+
+.nav-company {
     max-width: 23rem;
     width: 100%;
     background-color: var(--blue);
     padding: 1.5rem;
-
+    height: 100%;
 }
 
-.container_company .nav_company h1{
+.main-company {
+    width: 100%;
+    background-color: var(--grey_body);
+    height: 100%;
+    box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8) inset;
+    -webkit-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8) inset;
+    -moz-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8) inset; 
+}
+
+
+.nav-company h1 {
     text-align: center;
     color: white;
     margin-bottom: 2rem;
@@ -69,12 +231,12 @@ body {
 
 
 
-.container_company .nav_company ul {
+.nav-company ul {
     margin: 0px;
     padding: 0px;
 }
 
-.container_company .nav_company ul li{
+.nav-company ul li{
     list-style: none;
     margin: 0px;
     margin-left: 2rem;
@@ -86,21 +248,21 @@ body {
 
 
 
-.container_company .nav_company ul li a i{
+.nav-company ul li a i{
     padding-right: 1rem;
 }
 
 
-.container_company .nav_company ul a {
+.nav-company ul a {
     color: white;
 }
 
 
-.container_company .nav_company hr{
+.nav-company hr{
     background-color:  rgba(255,255,255,.15);
 }
 
-.container_company .nav_company .employee {
+.nav-company .employee {
     display: flex;
     justify-content: space-between;
     padding-right: 0px;
@@ -118,13 +280,13 @@ body {
 }
 
 
-.container_company .nav_company .sub_menu {
+.nav-company .sub_menu {
     background-color: white;
     border-radius: 1rem;
     padding: 0;
 }
 
-.container_company .nav_company .sub_menu ul li {
+.nav-company .sub_menu ul li {
     color: var(--blue);
     padding: 1rem 0;
     margin: 0px;
@@ -132,35 +294,55 @@ body {
 
 }
 
-.container_company .nav_company .sub_menu ul li:hover {
-    background-color: var(--grey);
-    border-radius: 1rem;
+.nav-company .sub_menu ul li:nth-child(1):hover {
+    background-color: var(--shadow);
+    border-radius: 1rem 1rem 0 0;
     padding: 1.5rem 1rem ;
-
 }
 
+.nav-company .sub_menu ul li:nth-child(2):hover {
+    background-color: var(--shadow);
+    border-radius: 0;
+    padding: 1.5rem 1rem ;
+}
 
-.container_company .nav_company .sub_menu a {
+.nav-company .sub_menu ul li:nth-child(3):hover {
+    background-color: var(--shadow);
+    border-radius: 0;
+    padding: 1.5rem 1rem ;
+}
+
+.nav-company .sub_menu ul li:nth-child(4):hover {
+    background-color: var(--shadow);
+    border-radius: 0 0 1rem 1rem;
+    padding: 1.5rem 1rem ;
+}
+
+.nav-company .sub_menu a {
     color: var(--blue);
 }
 
 
 
 @media screen and (max-width: 768px) {
-  
-    .container_company .nav_company {
+    
+    .header-title h1 {
+        display: none;
+    }
+
+    .nav-company {
         max-width: 23rem;
         width: 10rem;
     }
 
-    .container_company .nav_company ul li {
+    .nav-company ul li {
         margin-left: 0px;
     }
     
 
 
     
-    .container_company .nav_company ul li a {
+    .nav-company ul li a {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -170,20 +352,20 @@ body {
 
 
 
-    .container_company .nav_company ul li a span {
+    .nav-company ul li a span {
         padding-top: 1rem;
         font-size: 1.2rem;
     }
 
-    .container_company .nav_company ul li a i {
+    .nav-company ul li a i {
         font-size: 2rem;
     }
     
-    .container_company .fa-chevron-down {
+    .fa-chevron-down {
         display: none;
     }
 
-    .container_company .nav_company .sub_menu {
+    .nav-company .sub_menu {
         position: absolute;
         left: 10rem;
         top: 25rem;
@@ -192,13 +374,13 @@ body {
         -moz-box-shadow: 1px -1px 21px -10px rgba(0,0,0,0.44);
     }
 
-    .container_company .nav_company .employee {
+    .nav-company .employee {
         display: block;
         padding-right: 1rem;
     
     }
 
-    .container_company .nav_company  h1 {
+    .nav-company  h1 {
         font-size: 2rem;
         text-align: center;
         padding: 0px;
@@ -207,123 +389,31 @@ body {
     }
 
 
-    .container_company .nav_company ul li a i{
+    .nav-company ul li a i{
         padding-right: 0rem;
     }
     
-    .container_company .nav_company .sub_menu ul li i {
+    .nav-company .sub_menu ul li i {
         font-size: 1.4rem;
     
     }
     
-    .container_company .nav_company .sub_menu ul li a {
+    .nav-company .sub_menu ul li a {
         font-size: 1.3rem;
     
     }
     
-    .container_company .nav_company .sub_menu   {
+    .nav-company .sub_menu   {
         padding:0px;
     
     }
   }
 
 
-/******************Fin estilos layout_company sidebar********************/
-
-/******************Inicio estilos layout_company header********************/
-
-
-.container_company .header_company {
-    height: 7rem;
-    background-color: white;
-    padding: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-}
-
-
-.container_company .header_company .fa-bars {
-    font-size: 2rem;
-    color: var(--blue);
-    padding: 1rem;
-
-}
-
-.container_company .header_company .fa-bars:hover {
-    background-color: var(--grey_shadow);
-    border-radius: 50%;
-
-}
-
-.container_company .header_company .header_company_container_perfil .header_company_border {
-    width: 0;
-    border-right: 1px solid var(--grey);
-    height: 4rem;
-
-}
-
-.container_company .header_company .header_company_container_perfil {
-    display: flex;
-    justify-content: space-between;
-    color: var(--grey);
-    font-size: 1.5rem;
-    align-items: center;
-    width: 20rem;
-}
-
-
-.container_company .header_company .header_company_container_perfil a {
-    color: var(--grey);
-}
-
-.container_company .header_company .header_company_container_perfil .fa-bell:hover {
-    color: var(--grey_shadow);
-}
-
-.container_company .header_company  .header_company_perfil {
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-}
-
-.container_company .header_company  .header_company_perfil img {
-
-    width: 3rem;
-    margin-left: 2rem;
-}
-
-.container_company .header_company  .header_company_perfil span {
-
-    font-weight: bold;
-}
-
-.container_company .header_company  .header_company_perfil span:hover {
-
-    font-weight: bold;
-    color: var(--grey_shadow);
-}
-
-.container_header_main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-
-.main_company {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 4rem;
-    background-color: var(--grey_body);
-
-}
 
 
 
-/******************Fin estilos layout_company header********************/
+
+
+
+

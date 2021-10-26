@@ -27,3 +27,4 @@ def login(email, password):
 
     response = requests.post(f'{rest_api.URL_API}/signin', json=body)
     return response
+

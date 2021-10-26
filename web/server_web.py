@@ -1,5 +1,7 @@
-from flask import Flask, json, request, render_template, redirect, url_for, session, jsonify, Response
+from flask import Flask, request, render_template, redirect, url_for, session
 import os
+
+from flask.sessions import SessionInterface
 from services import auth
 
 app = Flask(__name__)
@@ -71,9 +73,25 @@ def register_company():
 def home_company():
     if 'logged_in' in session:
         nameCompany = session['nameCompany']
-        return render_template('layout_company.html', nameCompany=nameCompany)
+        return render_template('home_company.html', nameCompany=nameCompany)
     return redirect(url_for('login_company'))
 
+
+
+
+#Cierra seccion del usuario
+@app.route('/logout', methods=["POST", "GET"])
+def logout():
+    if request.method == 'GET':
+        if 'idCompany' in session:
+            session.clear()
+            return redirect(url_for('login_company'))
+        
+        if 'idPersonal' in session:
+            session.clear()
+            return redirect(url_for('login_personal'))
+
+    
 
 
 #Login empleados
@@ -95,7 +113,6 @@ def register_personal():
 @app.route('/list_of_employees')
 def list_of_employees():
     return render_template('list_of_employees.html')
-
 
 
 

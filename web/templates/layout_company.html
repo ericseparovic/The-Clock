@@ -15,15 +15,48 @@
 </head>
 
 <body>
-    <div class="container_company">
-        <!-- Sidebar -->
-        <nav class="nav_company">
+    <header class="header-company">
+        <div class="header-title">
+            <i class="fas fa-bars" id="btnBars"></i>            
             <h1>The Clock</h1>
-            <hr>
-            <ul>       
+        </div>
 
-                <li>  
-                    
+        <div class="header-company-container-perfil">
+            <i class="fas fa-bell"></i>
+            <div class="header-company-border"></div>
+            <a href="#" class="header-company-perfil">
+                {% block nameUser %}
+
+                {% endblock %}
+                <img id="imgPerfil" src="{{url_for('static', filename='img/perfil-del-usuario.png')}}" alt="">
+            </a>
+        </div>
+        <div class="dropdown active">
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="#">                        
+                        <i class="fas fa-users"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a class="dropdown-item" href="http://127.0.0.1:5005/logout">                        
+                        <i class="fas fa-users"></i>
+                        <span>Cerrar Sesion</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </header>
+
+    <div class="container-sidebar-main">
+
+        <!-- Sidebar -->
+        <nav class="nav-company">
+            <ul>       
+                <li>       
                     <a href="#">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Inicio</span>
@@ -37,8 +70,7 @@
                     </a>
                 </li>
                 <hr>
-                <li class="employee">
-                        
+                <li class="employee">      
                     <a href="#">
                         <i class="fas fa-users"></i>
                         <span>Empleados</span> 
@@ -91,31 +123,20 @@
                 <hr>
             </ul>
         </nav>
-        <!-- Container header main -->
-        <div class="container_header_main">       
-            <header class="header_company">
-                <i class="fas fa-bars" id="btnBars"></i>
-                <div class="header_company_container_perfil">
-                    <i class="fas fa-bell"></i>
-                    <div class="header_company_border"></div>
-                    <a href="#" class="header_company_perfil">
-                        <span>Eric Separovic</span>
-                        <img src="{{url_for('static', filename='img/perfil-del-usuario.png')}}" alt="">
-                    </a>
-                </div>
-            </header>
-            <main class="main_company">
-
+   
+            
+        <main class="main-company">
+                <h1>red</h1>
             {% block main %}
 
             {% endblock %}
 
-            </main>
+        </main>
 
         </div>
     </div>
     <script src="https://kit.fontawesome.com/8e93da113d.js" crossorigin="anonymous"></script>
-    <script src="{{url_for('static', filename='js/sidebar.js')}}"></script>
+    <script src="{{url_for('static', filename='js/layout_company.js')}}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script>
