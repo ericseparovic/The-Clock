@@ -1,8 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 import os
-
-from flask.sessions import SessionInterface
 from services import auth
+from services import personal
 
 app = Flask(__name__)
 
@@ -92,6 +91,49 @@ def logout():
             return redirect(url_for('login_personal'))
 
     
+#Registrar personal
+@app.route('/register_personal', methods=["POST", "GET"])
+def register_personal():
+    error = None
+    passwordDefault = 12345678
+
+    if request.method == 'POST':
+        document = request.form['document']
+        name = request.form['name']
+        lastname = request.form['lastname']
+        gender = request.form['gender']
+        birthday = request.form['birthday']
+        tel = request.form['tel']
+        address = request.form['address']
+        email = request.form['email']
+        idCompany = session['idCompany']
+        nameCompany = session['nameCompany']
+
+        response = personal.register_personal(document, name, lastname, gender, birthday, tel, address, email, idCompany)
+
+        if response.status_code == 200:
+    
+            error = response.text
+
+            if 'logged_in' in session:
+
+                return render_template('register_personal.html', nameCompany=nameCompany, error=error)
+            render_template('register_personal.html', error=error, passwordDefault=passwordDefault, nameCompany=nameCompany)
+        else:
+            error = response.text
+
+            return render_template('register_personal.html', error=error, passwordDefault=passwordDefault, nameCompany=nameCompany)
+
+    if request.method == 'GET':
+        if 'logged_in' in session:
+            nameCompany = session['nameCompany']
+            return render_template('register_personal.html', nameCompany=nameCompany)
+        return redirect(url_for('login_company'))
+
+    return redirect(url_for('login_company'))
+
+
+
 
 
 #Login empleados
@@ -102,10 +144,7 @@ def login_personal():
 
 
 
-#Ingresar empleado
-@app.route('/register_personal')
-def register_personal():
-    return render_template('register_personal.html')
+
 
 
 

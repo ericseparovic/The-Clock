@@ -134,64 +134,44 @@ def signin():
 @app.route('/register_personal', methods=["POST", "GET"])
 def register_personal():
      if request.method == 'POST':
-        document = request.form['document']
-        name = request.form['name']
-        lastname = request.form['lastname']
-        gender = request.form['gender']
-        birthday = request.form['birthday']
-        tel = request.form['tel']
-        email = request.form['email']
-        address = request.form['address']
+        date = request.get_json()
+
+        document = date['document']
+        name = date['name']
+        lastname = date['lastname']
+        gender = date['gender']
+        birthday = date['birthday']
+        tel = date['tel']
+        address = date['address']
+        email = date['email']
         password = 12345678
+        idCompany = date['idCompany']
         idRol = 2
 
-        #Valida que el fomrmulario no este vacio
-        def validation_form():
-            if document == "":
-                return 'Documento es requerido', 412
-            if name == "":
-                return 'Nombre es requerido', 412
-            if lastname == "":
-                return 'Apellido es requerido', 412
-            if gender == "":
-                return 'Genero es requerido', 412
-            if tel == "":
-                return 'Telefono es requerido', 412
-            if birthday == "":
-                return 'Fecha de nacimiento es requerido', 412
-            if email == "":
-                return 'Correo es requerido', 412
-            if address == "":
-                return 'Direccion es requerida', 412
-            if password == "":
-                return 'Clave es requerida', 412
-            return True
+        if personal.validation_form_personal(document, name, lastname, gender, birthday, tel, address, email, password, idCompany) == True:
 
-
-        if validation_form() == True:
-            #Consulta si el usuario ya esta registrado.
-            if auth.search_user(email):
-                return "Usuario ya esta registrado", 412
+            #Primero se verifica si el correo ya esta registrado
+            existsEmail = auth.search_user(email)
+            if existsEmail == True:
+                return "Correo ya esta registrado", 409
             else:
-                #Se verifica que el usuario administrador tenga iniciado sesion
-                if 'email' in session:
-                    idCompany = session['company']
 
-                    if personal.get_id_personal(document, idCompany):
-                        return "Empleado ya registrado en la planilla", 412
-                    else:
-                        
-                        # Crea usuario y retorna el id
-                        idUser=  auth.create_user(email, password, idRol)
+                existsDocument = personal.get_id_personal(document, idCompany)
 
-                        # Registra datos del empleado
-                        result = personal.register_personal(document, name, lastname, gender, birthday, tel, address, idUser, idCompany)
-                        return result
-                else:
-                    return "Debe iniciar sesion", 412
+                if existsDocument == True:
+                    return 'Usuario ya esta registrado', 409
 
+                if existsDocument == False:
+                    
+                    #Registra los datos del usuario y retorna el id
+                    idUser=  auth.create_user(email, password, idRol)
+
+                    #Registra los datos del empleado
+                    result = personal.register_personal(document, name, lastname, gender, birthday, tel, address, email, password, idCompany, idUser)
+                    return result
+            
         else:
-            return validation_form()
+            return personal.validation_form_personal(document, name, lastname, gender, birthday, tel, address, email, password, idCompany)
 
 
 

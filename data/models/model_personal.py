@@ -3,17 +3,18 @@ from data.models import model_user
   
 
 #Registra datos del empleado
-def register_personal(document, name, lastname, gender, birthday, phone, address, idUser, idCompany):
+def register_personal(document, name, lastname, gender, birthday, tel, address, email, password, idCompany, idUser):
 
     register_personal_sql = f"""
     INSERT INTO EMPLEADOS(DOCUMENTO, NOMBRE, APELLIDO, GENERO, FECHA_NACIMIENTO, TELEFONO, DIRECCION, ID_USUARIO, ID_EMPRESA)
-    VALUES ('{document}','{name}', '{lastname}', '{gender}', '{birthday}', '{phone}','{address}','{idUser}', '{idCompany}')
+    VALUES ('{document}','{name}', '{lastname}', '{gender}', '{birthday}', '{tel}','{address}','{idUser}', '{idCompany}')
     """
     bd = DataBase()
     bd.ejecutar_sql(register_personal_sql)
-
-    return "Se registro empleado", 200
-    
+    try:
+        return "Se registro correctamente", 200
+    except:
+        return "No se pudo registrar", 412
     
 
     

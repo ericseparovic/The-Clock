@@ -1,10 +1,25 @@
 {% extends 'layout_company.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/register_personal.css')}}">
+{% endblock head %}
+
+{% block nameUser %}
+    <span id="nameUser">{{nameCompany}}</span>
+{% endblock nameUser %}
+
 {% block main %}
 
-    <section class="section_register_personal">
+    <section class="section-register-personal">
         <h2>Registrar Empleado</h2>
         <hr>
-        <form action="" class="form">
+        <div class="container-error">
+            <p class="errorFront"></p>
+            {% if error %}
+            <p class="errorBack">{{error}}</p>
+            {% endif %}
+        </div>
+        <form action="" class="form-register-personal" method="post">
             <div>
                 <label for="document">Documento</label>
                 <input type="number" name="document" placeholder="Documento sin punto ni guiones">
@@ -20,7 +35,7 @@
             <div>
                 <label for="gender">Genero</label>
                 <select name="gender" id="gender">
-                    <option disabled selected>Seleccione genero</option>
+                    <!-- <option disabled selected>Seleccione genero</option> -->
                     <option value="masculino">Masculino</option>
                     <option value="femenino">Femenino</option>
                                                     

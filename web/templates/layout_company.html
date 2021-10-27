@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    {% block head %}
+
+    {% endblock %}
     <title>The Clock</title>
 </head>
 
@@ -35,14 +38,14 @@
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" href="#">                        
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-user"></i>
                         <span>Perfil</span>
                     </a>
                 </li>
                 <hr>
                 <li>
                     <a class="dropdown-item" href="http://127.0.0.1:5005/logout">                        
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-sign-out-alt"></i>                        
                         <span>Cerrar Sesion</span>
                     </a>
                 </li>
@@ -57,7 +60,7 @@
         <nav class="nav-company">
             <ul>       
                 <li>       
-                    <a href="#">
+                    <a href="/home_company">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Inicio</span>
                     </a>
@@ -80,13 +83,13 @@
                 <li class="sub_menu active">
                     <ul >
                         <li>   
-                            <a id="register_personal" href="http://127.0.0.1:5005/register_personal">
+                            <a id="register_personal" href="/register_personal">
                                 <i class="fas fa-user-plus"></i>
                                 <span>Registrar empleado</span>
                             </a>
                         </li>
                         <li>  
-                            <a id="lista_empleados" href="http://127.0.0.1:5005/list_of_employees">
+                            <a id="lista_empleados" href="/list_of_employees">
                                 <i class="fas fa-list"></i>
                                 <span>Lista de Empleados</span>
                             </a>
@@ -126,7 +129,6 @@
    
             
         <main class="main-company">
-                <h1>red</h1>
             {% block main %}
 
             {% endblock %}

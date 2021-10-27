@@ -30,12 +30,12 @@ function showDropDown(e){
         }
 }
 
-// // Muestra el submenu cuando estamos en la pagina registrar usuario
-// window.addEventListener("load", hola);
+// Muestra el submenu cuando estamos en la pagina registrar usuario
+window.addEventListener("load", loadSubMenu);
 
-// function hola(e){
-//         url = window.location.pathname
-//         if(url == '/register_personal'){
-//                 showSubMenu()
-//         }
-// }
+function loadSubMenu(){
+        url = window.location.pathname
+        if(url == '/register_personal'){
+                showSubMenu()
+        }
+}
