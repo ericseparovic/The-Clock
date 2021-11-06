@@ -4,14 +4,13 @@ from services import auth
 from services import personal
 
 app = Flask(__name__)
-
 app.config.update(SECRET_KEY=os.urandom(24))
-
 
 
 
 #Login empresas
 @app.route('/', methods=["GET", "POST"])
+
 def login_company():
     error = None
     if request.method == 'POST':
@@ -28,7 +27,7 @@ def login_company():
             session['nameCompany'] = data_company['nameCompany']
             session['idCompany'] = data_company['idCompany']
 
-            return redirect(url_for('home_company'))
+            return redirect(url_for('register_personal'))
 
         if response.status_code == 412:
             error = response.text
@@ -72,7 +71,9 @@ def register_company():
 def home_company():
     if 'logged_in' in session:
         nameCompany = session['nameCompany']
-        return render_template('home_company.html', nameCompany=nameCompany)
+        idCompany = session['idCompany']
+
+        return render_template('home_company.html', nameCompany=nameCompany, idCompany=idCompany)
     return redirect(url_for('login_company'))
 
 
@@ -121,13 +122,13 @@ def register_personal():
             render_template('register_personal.html', error=error, passwordDefault=passwordDefault, nameCompany=nameCompany)
         else:
             error = response.text
-
             return render_template('register_personal.html', error=error, passwordDefault=passwordDefault, nameCompany=nameCompany)
 
     if request.method == 'GET':
         if 'logged_in' in session:
             nameCompany = session['nameCompany']
-            return render_template('register_personal.html', nameCompany=nameCompany)
+            idCompany = session['idCompany']
+            return render_template('register_personal.html', nameCompany=nameCompany, idCompany=idCompany)
         return redirect(url_for('login_company'))
 
     return redirect(url_for('login_company'))
@@ -144,17 +145,123 @@ def login_personal():
 
 
 
-
-
-
-
 #Lista de empleados
-@app.route('/list_of_employees')
-def list_of_employees():
-    return render_template('list_of_employees.html')
+@app.route('/list_personal', methods=["POST", "GET"])
+def list_personal():
+    if request.method == 'GET':
+        if 'logged_in' in session:
+            nameCompany = session['nameCompany']
+            idCompany = session['idCompany']
+            response = personal.get_all_personal(idCompany)
+            all_personal = response.json()
+            code = response.status_code
+
+            print(all_personal)
+            return render_template('list_personal.html', nameCompany=nameCompany, idCompany=idCompany, all_personal=all_personal, code=code)
+        return redirect(url_for('login_company'))
+
+    return redirect(url_for('login_company'))
 
 
+@app.route('/delete_personal/<idPersonal>', methods=["GET"])
+def delete_personal(idPersonal):
+    if 'logged_in' in session:
+        response = personal.delete_personal(idPersonal)
+        
+        if response.status_code == 200:
+            #Cargar list_personal
+            return redirect(url_for('list_personal'))
 
+        
+        if response.status_code == 412:
+            #Mostrar error
+            nameCompany = session['nameCompany']
+            idCompany = session['idCompany']
+            response = personal.get_all_personal(idCompany)
+            all_personal = response.json()
+            error = "No se pudo eliminar"
+            return render_template('list_personal.html', nameCompany=nameCompany, idCompany=idCompany, all_personal=all_personal, error=error)
+
+    return redirect(url_for('login_company'))
+
+
+#Endopoint actualizar datos
+@app.route('/update_personal/<idPersonal>', methods=["GET", "POST"])
+def update_personal(idPersonal):
+    if 'logged_in' in session:
+        nameCompany = session['nameCompany']
+        idCompany = session['idCompany']
+
+        if request.method == 'GET':
+                dataPersonal = personal.get_personal(idPersonal)
+                dataPersonal = dataPersonal.json()
+                print(dataPersonal)
+                return render_template('update_personal.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, dataPersonal=dataPersonal[0])
+
+        if request.method == 'POST':
+
+            document = request.form['document']
+            name = request.form['name']
+            lastname = request.form['lastname']
+            gender = request.form['gender']
+            birthday = request.form['birthday']
+            tel = request.form['tel']
+            address = request.form['address']
+
+            response = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+            dataPersonal = personal.get_personal(idPersonal)
+            dataPersonal = dataPersonal.json()
+            if response.status_code == 200:
+                error = response.text
+                return render_template('update_personal.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal[0])
+    
+            if response.status_code == 409:
+                error = response.text
+                return render_template('update_personal.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+
+    return redirect(url_for('login_company'))
+
+
+# #Actualizar datos personal
+# @app.route('/update_personal/<idPersonal>', methods=["POST", "GET", "PUT"])
+# def update_personal_id(idPersonal):
+#     error = None
+
+#     if request.method == 'POST':
+#         document = request.form['document']
+#         name = request.form['name']
+#         lastname = request.form['lastname']
+#         gender = request.form['gender']
+#         birthday = request.form['birthday']
+#         tel = request.form['tel']
+#         address = request.form['address']
+#         nameCompany = session['nameCompany']
+#         idPersonal = request.form['idPersonal']
+
+#         response = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+
+#         if response.status_code == 200:
+    
+#             error = response.text
+
+#             if 'logged_in' in session:
+
+#                 return render_template('update_personal.html', nameCompany=nameCompany, error=error)
+#             render_template('update_personal.html', error=error, nameCompany=nameCompany)
+#         else:
+#             error = response.text
+#             return render_template('update_personal.html', error=error, nameCompany=nameCompany)
+
+#     if request.method == 'GET':
+#             if 'logged_in' in session:
+#                 nameCompany = session['nameCompany']
+#                 idCompany = session['idCompany']
+#                 return render_template('register_personal.html', nameCompany=nameCompany, idCompany=idCompany)
+
+#     return redirect(url_for('login_company'))
+
+
+   
 if __name__ == '__main__':
     app.debug = True
     app.run(port=5005)

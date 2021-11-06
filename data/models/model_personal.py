@@ -35,9 +35,9 @@ def get_all_personal(idCompany):
             'document': personal[1],
             'name': personal[2],
             'lastName': personal[3],
-            'genero': personal[4],
-            'year': personal[5],
-            'phone': personal[6],
+            'gender': personal[4],
+            'birthday': personal[5],
+            'tel': personal[6],
             'address': personal[7],
             'idUser': personal[8],
             'idCompany': personal[9],
@@ -65,7 +65,7 @@ def get_personal(idPersonal):
             'lastName': personal[3],
             'genero': personal[4],
             'year': personal[5],
-            'phone': personal[6],
+            'tel': personal[6],
             'address': personal[7],
             'idUser': personal[8],
             'idCompany': personal[9],
@@ -94,19 +94,19 @@ def delete_personal(idPersonal):
         return True
 
 #ACtualiza datos del empleado
-def update_personal(idPersonal, document, name, lastname, gender, birthday, phone, address):
+def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal):
     update_personal_sql = f"""
-        UPDATE EMPLEADOS SET DOCUMENTO='{document}', NOMBRE='{name}', APELLIDO='{lastname}', GENERO='{gender}', FECHA_NACIMIENTO='{birthday}', TELEFONO='{phone}', DIRECCION='{address}' WHERE ID_EMPLEADO='{idPersonal}'
+        UPDATE EMPLEADOS SET DOCUMENTO='{document}', NOMBRE='{name}', APELLIDO='{lastname}', GENERO='{gender}', FECHA_NACIMIENTO='{birthday}', TELEFONO='{tel}', DIRECCION='{address}' WHERE ID_EMPLEADO='{idPersonal}'
     """
 
     #Consultamos si el id que queremos actualizar esta registrado pertenece a un usuario
     result = get_personal(idPersonal)
 
     if len(result) == 0:
-        return "No existe empleado con ese id"
+        return False
     else:
         db = DataBase()
-        user = db.ejecutar_sql(update_personal_sql)
+        db.ejecutar_sql(update_personal_sql)
         return True
 
 #Retorna id de la personal

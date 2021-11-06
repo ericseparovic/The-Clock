@@ -18,9 +18,10 @@ def delete_personal(idPersonal):
     return model_personal.delete_personal(idPersonal)
 
 #Actualiza datos del empleado
-def update_personal(idPersonal, document, name, lastname, gender, birthday, phone, address):
-    return model_personal.update_personal(idPersonal, document, name, lastname, gender, birthday, phone, address)
-    
+def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal):
+    return model_personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+
+
 #obtiene id usuario
 def search_id_personal(email):
     return model_personal.search_id_personal(email)
@@ -33,7 +34,6 @@ def get_id_personal(document, idCompany):
 def validation_form_personal(document, name, lastname, gender, birthday, tel, address, email, password, idCompnay):
     print(document, name, lastname, gender, birthday, tel)
 
-    print('hofsdfjaskdfklsdjf;asjdjf')
     if document == "":
         return 'Documento es requerido', 412
     if name == "":

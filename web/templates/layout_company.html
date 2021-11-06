@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
     {% block head %}
 
     {% endblock %}
@@ -89,7 +89,7 @@
                             </a>
                         </li>
                         <li>  
-                            <a id="lista_empleados" href="/list_of_employees">
+                            <a id="lista_empleados" href="/list_personal">
                                 <i class="fas fa-list"></i>
                                 <span>Lista de Empleados</span>
                             </a>
@@ -137,15 +137,14 @@
 
         </div>
     </div>
+
+
     <script src="https://kit.fontawesome.com/8e93da113d.js" crossorigin="anonymous"></script>
     <script src="{{url_for('static', filename='js/layout_company.js')}}"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        } );    
-    </script>
+
+    {% block script %}
+
+    {% endblock %}
 </body>
 
 </html>

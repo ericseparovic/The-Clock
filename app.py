@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify
+from flask import Flask, json, request, render_template, redirect, url_for, session, jsonify
 from services import auth
 from services import company
 from services import personal
@@ -134,18 +134,18 @@ def signin():
 @app.route('/register_personal', methods=["POST", "GET"])
 def register_personal():
      if request.method == 'POST':
-        date = request.get_json()
+        data = request.get_json()
 
-        document = date['document']
-        name = date['name']
-        lastname = date['lastname']
-        gender = date['gender']
-        birthday = date['birthday']
-        tel = date['tel']
-        address = date['address']
-        email = date['email']
+        document = data['document']
+        name = data['name']
+        lastname = data['lastname']
+        gender = data['gender']
+        birthday = data['birthday']
+        tel = data['tel']
+        address = data['address']
+        email = data['email']
         password = 12345678
-        idCompany = date['idCompany']
+        idCompany = data['idCompany']
         idRol = 2
 
         if personal.validation_form_personal(document, name, lastname, gender, birthday, tel, address, email, password, idCompany) == True:
@@ -176,32 +176,32 @@ def register_personal():
 
 
 #API empelados: Obtiene todos los empleados de la empresa
-@app.route('/all_personal')
+@app.route('/get_all_personal')
 def get_all_personal():
-    idCompany =  request.args.get("idCompany")
+    data = request.get_json()
+    idCompany = data['idCompany']
 
     allPersonal = personal.get_all_personal(idCompany)
 
     if len(allPersonal) == 0:
-        return jsonify("No hay registro de personal") 
+        return jsonify("No hay registro de personal"), 412
     else:
-        return jsonify(allPersonal)
+        return jsonify(allPersonal), 200
 
 
 #API Empleado: Obtiene los datos de un empleado
-@app.route('/personal')
-def get_personal():
-    idPersonal =  request.args.get("idPersonal")
+@app.route('/get_personal/<idPersonal>')
+def get_personal(idPersonal):
 
     result = personal.get_personal(idPersonal)
     if len(result) == 0:
-        return jsonify('No hay registro'), 412
+        return jsonify('No hay registro'), 409
     else:
         return jsonify(result)
 
 
 #Elimna empleado de la base de datos
-@app.route('/personal/<idPersonal>', methods=['DELETE'])
+@app.route('/delete_personal/<idPersonal>', methods=["GET", "POST", "DELETE"])
 def delete_personal(idPersonal):
     result = personal.delete_personal(idPersonal)
     
@@ -212,20 +212,25 @@ def delete_personal(idPersonal):
 
 
 #Actualiza datos del emplado en la base de datos
-@app.route('/personal', methods=['PUT'])
-def update_personal():
-    document = request.form['document']
-    name = request.form['name']
-    lastname = request.form['lastname']
-    gender = request.form['gender']
-    birthday = request.form['birthday']
-    tel = request.form['tel']
-    address = request.form['address']
-    idPersonal = request.form['id']
+@app.route('/update_personal/<idPersonal>', methods=['GET','POST', 'PUT'])
+def update_personal(idPersonal):
+        data = request.get_json()
 
-    result = personal.update_personal(idPersonal, document, name, lastname, gender, birthday, tel, address)
+        document = data['document']
+        name = data['name']
+        lastname = data['lastname']
+        gender = data['gender']
+        birthday = data['birthday']
+        tel = data['tel']
+        address = data['address']
 
-    return 'Datos Actulizados', 200
+        #Actualiza datos personales
+        result = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+        if result == True:
+            return 'Se actualizaron los datos', 200
+
+        if result == False:
+            return 'No existe usuario', 409
 
 
 #Asignar horario

@@ -24,7 +24,7 @@ function showSideBar(e){
 
 
 function showDropDown(e){
-        if(e.target.id == 'nameUser' || e.target.id == 'imgPerfil'){
+        if(e.target.className == 'nameUser' || e.target.id == 'imgPerfil'){
                 HTMLDropDown.classList.toggle('active')
 
         }
@@ -36,6 +36,10 @@ window.addEventListener("load", loadSubMenu);
 function loadSubMenu(){
         url = window.location.pathname
         if(url == '/register_personal'){
+                showSubMenu()
+        }
+
+        if(url == '/list_of_employees'){
                 showSubMenu()
         }
 }
