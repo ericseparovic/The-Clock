@@ -1,4 +1,5 @@
 from flask import Flask, json, request, render_template, redirect, url_for, session, jsonify
+from flask.wrappers import Response
 from services import auth
 from services import company
 from services import personal
@@ -203,12 +204,10 @@ def get_personal(idPersonal):
 #Elimna empleado de la base de datos
 @app.route('/delete_personal/<idPersonal>', methods=["GET", "POST", "DELETE"])
 def delete_personal(idPersonal):
-    result = personal.delete_personal(idPersonal)
-    
-    if result == True:
-        return "Empleado eliminado", 200
-    else:
-        return "No se pudo elimnar", 412
+    idUser = personal.get_id_user(idPersonal)
+    print('#############################################')
+    response = personal.delete_personal(idPersonal, idUser)
+    return "ok", 200
 
 
 #Actualiza datos del emplado en la base de datos

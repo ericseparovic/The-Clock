@@ -14,8 +14,8 @@ def get_personal(idPersonal):
     return model_personal.get_personal(idPersonal)
 
 #Elimina empleado de la lista
-def delete_personal(idPersonal):
-    return model_personal.delete_personal(idPersonal)
+def delete_personal(idPersonal, idUser):
+    return model_personal.delete_personal(idPersonal, idUser)
 
 #Actualiza datos del empleado
 def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal):
@@ -55,3 +55,6 @@ def validation_form_personal(document, name, lastname, gender, birthday, tel, ad
     if idCompnay == "":
         return 'id compnay no indicado', 412
     return True
+
+def get_id_user(idPersonal):
+    return model_personal.get_id_user(idPersonal)

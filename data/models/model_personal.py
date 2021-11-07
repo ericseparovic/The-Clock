@@ -77,21 +77,27 @@ def get_personal(idPersonal):
 
 
 #Elimina empleado de la tabla empleados
-def delete_personal(idPersonal):
+def delete_personal(idPersonal, idUser):
     delete_personal_sql = f"""
         DELETE FROM EMPLEADOS WHERE ID_EMPLEADO='{idPersonal}'
+    """
+    delete_usuario_sql = f"""
+        DELETE FROM USUARIOS WHERE ID_USUARIO='{idUser}'
     """
 
     #Consultamos si el id que queremos borrar pertenece a un usuario
     result = get_personal(idPersonal)
 
     if len(result) == 0:
-        return "No existe empleado con ese id"
+        return "No existe empleado con ese id", 409
     else:
         db = DataBase()
-        user = db.ejecutar_sql(delete_personal_sql)
-        print(result)
-        return True
+        try:
+            db.ejecutar_sql(delete_personal_sql)
+            db.ejecutar_sql(delete_usuario_sql)
+            return "Se elimino correctamente", 200
+        except:
+            return "No se pudo eliminar", 412
 
 #ACtualiza datos del empleado
 def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal):
@@ -157,3 +163,13 @@ def get_id_personal(document, idCompany):
         return True
     else: 
         return False
+
+
+def get_id_user(idPersonal):
+    select_id_sql =  f"""
+            SELECT ID_USUARIO FROM EMPLEADOS WHERE ID_EMPLEADO='{idPersonal}'
+    """ 
+    db = DataBase()
+    idUser = db.ejecutar_sql(select_id_sql) 
+    
+    return idUser[0][0]
