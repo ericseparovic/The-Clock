@@ -53,6 +53,22 @@ def update_personal(document, name, lastname, gender, birthday, tel, address, id
 
 def get_personal(idPersonal):
     response = requests.get(f'{rest_api.URL_API}/get_personal/{idPersonal}')
-    print('(##################3')
-    print(response)
     return response
+
+
+def assign_schedule(workStart, workEnd, idPersonal):
+    body = {
+        'workStart': workStart,
+        'workEnd': workEnd,
+    }
+    response = requests.post(f'{rest_api.URL_API}/insert_schedule/{idPersonal}', json=body)
+    return response
+
+def assign_days_off(date, reason, idPersonal):
+    body = {
+        'date': date,
+        'reason': reason
+    }
+    response = requests.post(f'{rest_api.URL_API}/insert_authorized_absences/{idPersonal}', json=body)
+    return response
+    

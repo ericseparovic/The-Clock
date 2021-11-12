@@ -1,0 +1,46 @@
+{% extends 'layout_company.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/assign_days_off.css')}}">
+{% endblock head %}
+
+{% block nameUser %}
+    <span class="nameUser" id="{{idCompany}}">{{nameCompany}}</span>
+{% endblock nameUser %}
+
+{% block main %}
+
+    <section class="section-assign-days-off">
+        <h2>Asignar Dias Libres</h2>
+        <hr>
+        <div class="container-error">
+            <p class="errorFront"></p>
+            {% if error %}
+            <p class="errorBack">{{error}}</p>
+            {% endif %}
+        </div>
+        <form action="http://127.0.0.1:5005/assign_days_off/{{idPersonal}}" class="form-assing-schedule" method="POST" id="formSchedule">
+            <section>
+                <div>
+                    <label for="reason">Motivo</label>
+                    <select name="reason" id="reason">
+                        <!-- <option disabled selected>Seleccione genero</option> -->
+                        <option value="licencia">Licencia</option>
+                        <option value="libre">Libre</option>                           
+                    </select>
+                </div>
+                <div>
+                    <label for="date">Fecha Ausencia</label>
+                    <input id="date" type="date" name="date" placeholder="Fecha Ausencia" value="{{dataPersonal['document']}}">
+                </div>
+            </section>  
+        </form>
+        <hr>
+        <div>
+            <input type="submit" value="Asignar Horario" id="btnAssingSchedule" form="formSchedule">
+            <a id="btnCancelar" href="/list_personal">Cancelar</a>
+        </div>
+    </section>
+            
+
+{% endblock main %}

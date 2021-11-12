@@ -1,0 +1,42 @@
+{% extends 'layout_company.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/assign_schedule.css')}}">
+{% endblock head %}
+
+{% block nameUser %}
+    <span class="nameUser" id="{{idCompany}}">{{nameCompany}}</span>
+{% endblock nameUser %}
+
+{% block main %}
+
+    <section class="section-assing-schedule">
+        <h2>Asignar Horario</h2>
+        <hr>
+        <div class="container-error">
+            <p class="errorFront"></p>
+            {% if error %}
+            <p class="errorBack">{{error}}</p>
+            {% endif %}
+        </div>
+        <form action="http://127.0.0.1:5005/assign_schedule/{{idPersonal}}" class="form-assing-schedule" method="POST" id="formSchedule">
+            <section>
+                <div>
+                    <label for="workStart">Hora Entrada</label>
+                    <input id="workStart" type="time" name="workStart" placeholder="Hora entrada" value="{{dataPersonal['document']}}">
+                </div>
+                <div>
+                    <label for="workEnd">Hora Salida</label>
+                    <input type="time" name="workEnd" placeholder="Hora salida" value="{{dataPersonal['name']}}">
+                </div>
+            </section>  
+        </form>
+        <hr>
+        <div>
+            <input type="submit" value="Asignar Horario" id="btnAssingSchedule" form="formSchedule">
+            <a id="btnCancelar" href="/list_personal">Cancelar</a>
+        </div>
+    </section>
+            
+
+{% endblock main %}

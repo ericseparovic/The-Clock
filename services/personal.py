@@ -32,7 +32,6 @@ def get_id_personal(document, idCompany):
 
 #Valida que el fomrmulario no este vacio
 def validation_form_personal(document, name, lastname, gender, birthday, tel, address, email, password, idCompnay):
-    print(document, name, lastname, gender, birthday, tel)
 
     if document == "":
         return 'Documento es requerido', 412
@@ -58,3 +57,25 @@ def validation_form_personal(document, name, lastname, gender, birthday, tel, ad
 
 def get_id_user(idPersonal):
     return model_personal.get_id_user(idPersonal)
+
+
+def validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal):
+    if document == "":
+        return 'Documento es requerido', 412
+    if name == "":
+        return 'Nombre es requerido', 412
+    if lastname == "":
+        return 'Apellido es requerido', 412
+    if gender == "":
+        return 'Genero es requerido', 412
+    if birthday == "":
+        return 'Fecha de nacimiento es requerido', 412
+    if tel == "":
+        return 'Telefono es requerido', 412
+    if address == "":
+        return 'Direccion es requerida', 412
+    if idPersonal == "":
+        return 'Correo es requerido', 412
+    return True
+
+

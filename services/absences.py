@@ -22,3 +22,12 @@ def get_authorized_absence(startDate, endDate, idCompany):
 #Insierta incidencia de libre o falta en la tabla marcas
 def attendanceControl(idCompany, currentDate, currentTime):
     return model_mark.attendanceControl(idCompany, currentDate, currentTime)
+
+
+#se valida el formulario
+def validation_form_absences(date, reason):
+    if date == '':
+        return 'Debe indicar indicar fecha de falta', 412
+    if reason == '':
+            return 'Debe indicar motivo', 412
+    return True

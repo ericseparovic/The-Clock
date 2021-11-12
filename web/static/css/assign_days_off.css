@@ -3,6 +3,7 @@
     padding: 0px;
 }
 
+
 h2 {
     color: var(--blue);
     font-size: 3rem;
@@ -25,9 +26,8 @@ h2 {
 /******************************************************************************************/
 
 /**********INICIO ESTILOS VARIABLES**********/
-.section-register-personal {
+.section-assign-days-off {
     margin: 0 auto;
-    height: auto;
     border-radius: 1rem;
     background-color: white;
     box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8);
@@ -37,7 +37,7 @@ h2 {
     width: 100%;
 }
 
-.section-register-personal hr {
+.section-assign-days-off hr {
     width: 100%;
     height: 1px;
     border: 0;
@@ -45,18 +45,18 @@ h2 {
     margin: 4rem 0rem;
 }
 
-.form-register-personal {
+.form-assing-schedule {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
-.form-register-personal section {
-    width: 100%;
+.form-assing-schedule section {
+    width: 40%;
 }
 
-.form-register-personal div {
+.form-assing-schedule div {
     width: 90%;
     display: flex;
     justify-content: space-between;
@@ -65,19 +65,15 @@ h2 {
 }
 
 
-.form-register-personal label {
+.form-assing-schedule label {
     width: 25rem;
     font-size: 1.4rem;
     color: var(--grey);
 }
 
-input[type="number"],
-input[type="text"],
-input[type="date"],
-input[type="tel"],
-input[type="email"],
-select   {
-    width: 100%;
+input[type="date"], select {
+    width: 20%;
+    min-width: 15rem;
     height: 4rem;
     font-size: 1.4rem;
     border-radius: 2rem;
@@ -90,7 +86,7 @@ select   {
 
 
 
-.section-register-personal input[type="submit"] {
+.section-assign-days-off input[type="submit"] {
    
     width: auto;
     height: 4rem;
@@ -135,7 +131,7 @@ select   {
 
 
 
-.section-register-personal input[type="submit"] {
+.section-assign-days-off input[type="submit"] {
    
     width: auto;
     height: 3rem;

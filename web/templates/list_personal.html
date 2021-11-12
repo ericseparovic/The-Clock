@@ -35,8 +35,10 @@
                     <td>{{personal['gender']}}</td>
                     <td>{{personal['birthday']}}</td>
                     <td>
-                        <a href="/update_personal/{{personal['idPersonal']}}">Modificar</a>
-                        <a href="http://127.0.0.1:5005/delete_personal/{{personal['idPersonal']}}">Eliminar</a>
+                        <a href="/update_personal/{{personal['idPersonal']}}"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="/assign_schedule/{{personal['idPersonal']}}"> <i class="fas fa-user-clock"></i></a>
+                        <a href="/assign_days_off/{{personal['idPersonal']}}"><i class="fas fa-calendar-alt"></i></a>
+                        <a href="http://127.0.0.1:5005/delete_personal/{{personal['idPersonal']}}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
                 {% endfor %} 

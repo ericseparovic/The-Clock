@@ -219,49 +219,81 @@ def update_personal(idPersonal):
                 error = response.text
                 return render_template('update_personal.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
 
+            if response.status_code == 412:
+                error = response.text
+                return render_template('update_personal.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
     return redirect(url_for('login_company'))
 
 
-# #Actualizar datos personal
-# @app.route('/update_personal/<idPersonal>', methods=["POST", "GET", "PUT"])
-# def update_personal_id(idPersonal):
-#     error = None
+#Endopoint asignar horarios
+@app.route('/assign_schedule/<idPersonal>', methods=["GET", "POST"])
+def assign_schedule(idPersonal):
+    if 'logged_in' in session:
+        nameCompany = session['nameCompany']
+        idCompany = session['idCompany']
 
-#     if request.method == 'POST':
-#         document = request.form['document']
-#         name = request.form['name']
-#         lastname = request.form['lastname']
-#         gender = request.form['gender']
-#         birthday = request.form['birthday']
-#         tel = request.form['tel']
-#         address = request.form['address']
-#         nameCompany = session['nameCompany']
-#         idPersonal = request.form['idPersonal']
+        if request.method == 'GET':
+                dataPersonal = personal.get_personal(idPersonal)
+                dataPersonal = dataPersonal.json()
+                return render_template('assign_schedule.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, dataPersonal=dataPersonal[0])
 
-#         response = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+        if request.method == 'POST':
 
-#         if response.status_code == 200:
+            workStart = request.form['workStart']
+            workEnd = request.form['workEnd']
+
+
+            response = personal.assign_schedule(workStart, workEnd, idPersonal)
+            dataPersonal = personal.get_personal(idPersonal)
+            dataPersonal = dataPersonal.json()
+            if response.status_code == 200:
+                error = response.text
+                return render_template('assign_schedule.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal[0])
     
-#             error = response.text
+            if response.status_code == 409:
+                error = response.text
+                return render_template('assign_schedule.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+            
+            if response.status_code == 412:
+                error = response.text
+                return render_template('assign_schedule.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+    return redirect(url_for('login_company'))
 
-#             if 'logged_in' in session:
+#Endopoint asignar libres
+@app.route('/assign_days_off/<idPersonal>', methods=["GET", "POST"])
+def assign_days_off(idPersonal):
+    if 'logged_in' in session:
+        nameCompany = session['nameCompany']
+        idCompany = session['idCompany']
 
-#                 return render_template('update_personal.html', nameCompany=nameCompany, error=error)
-#             render_template('update_personal.html', error=error, nameCompany=nameCompany)
-#         else:
-#             error = response.text
-#             return render_template('update_personal.html', error=error, nameCompany=nameCompany)
+        if request.method == 'GET':
+                dataPersonal = personal.get_personal(idPersonal)
+                dataPersonal = dataPersonal.json()
+                return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, dataPersonal=dataPersonal[0])
 
-#     if request.method == 'GET':
-#             if 'logged_in' in session:
-#                 nameCompany = session['nameCompany']
-#                 idCompany = session['idCompany']
-#                 return render_template('register_personal.html', nameCompany=nameCompany, idCompany=idCompany)
+        if request.method == 'POST':
 
-#     return redirect(url_for('login_company'))
+            date = request.form['date']
+            reason = request.form['reason']
 
 
-   
+            response = personal.assign_days_off(date, reason, idPersonal)
+            dataPersonal = personal.get_personal(idPersonal)
+            dataPersonal = dataPersonal.json()
+
+            if response.status_code == 200:
+                error = response.text
+                return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal[0])
+    
+            if response.status_code == 409:
+                error = response.text
+                return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+            
+            if response.status_code == 412:
+                error = response.text
+                return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+    return redirect(url_for('login_company'))
+
 if __name__ == '__main__':
     app.debug = True
     app.run(port=5005)

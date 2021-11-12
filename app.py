@@ -205,7 +205,6 @@ def get_personal(idPersonal):
 @app.route('/delete_personal/<idPersonal>', methods=["GET", "POST", "DELETE"])
 def delete_personal(idPersonal):
     idUser = personal.get_id_user(idPersonal)
-    print('#############################################')
     response = personal.delete_personal(idPersonal, idUser)
     return "ok", 200
 
@@ -222,40 +221,33 @@ def update_personal(idPersonal):
         birthday = data['birthday']
         tel = data['tel']
         address = data['address']
+        if personal.validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal) == True:
 
-        #Actualiza datos personales
-        result = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
-        if result == True:
-            return 'Se actualizaron los datos', 200
+            #Actualiza datos personales
+            result = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+            if result == True:
+                return 'Se actualizaron los datos', 200
 
-        if result == False:
-            return 'No existe usuario', 409
+            if result == False:
+                return 'No existe usuario', 409
+        else:
+            return personal.validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal)
 
 
 #Asignar horario
-@app.route('/insert_schedule', methods=['POST'])
-def insert_schedule():
+@app.route('/insert_schedule/<idPersonal>', methods=['POST'])
+def insert_schedule(idPersonal):
     if request.method == 'POST':
-        workStart = request.form['workStart']
-        workEnd = request.form['workEnd']
-        idPersonal = request.form['idPersonal']
+        data = request.get_json()
+        workStart = data['workStart']
+        workEnd = data['workEnd']
 
-        #Validacion formulario
-        def validation_form():
-            if workStart == '':
-                return 'Debe ingresar hora de entrada', 412
-            if workEnd == '':
-                return 'Debe ingresar hora de salida', 412
-            if idPersonal == '':
-                return 'Debe seleccionar un funcionario', 412
-            return True
-        
-        if validation_form() == True:
+        if schedule.validation_form_schedule(workStart, workEnd, idPersonal) == True:
+
             result = schedule.insert_schedule(workStart, workEnd, idPersonal)
-
             return result
         else:
-            return validation_form()
+            return schedule.validation_form_schedule(workStart, workEnd, idPersonal)
 
 
 #Marcar hora de entrada
@@ -317,33 +309,18 @@ def insert_mark_end():
 
 
 #Indicar dias libres
-@app.route('/insert_authorized_absences', methods=['POST'])
-def insert_authorized_absences():
-    try:
-        #Se verifica que sea metodo POST
-        if request.method == 'POST':
-
-            #Se obtiene los datos
-            dateAbsence = request.form['dateAbsence']
-            reason = request.form['reason']
-            idPersonal = request.form['idPersonal']
-            
-            #se valida el formulario
-            def validation_form():
-                if dateAbsence == '':
-                    return 'Debe indicar indicar fecha de falta', 412
-                if reason == '':
-                        return 'Debe indicar motivo', 412
-                return True
-
-            if validation_form() == True:
-
-                result = absences.insert_authorized_absences(idPersonal, dateAbsence, reason)
-
-                return result
-    except:
-        return "No se pudo agregar ausencia", 412
-
+@app.route('/insert_authorized_absences/<idPersonal>', methods=['POST'])
+def insert_authorized_absences(idPersonal):
+    data = request.get_json()
+    date = data['date']
+    reason = data['reason']
+    
+    if request.method == 'POST':
+        if absences.validation_form_absences(date, reason) == True:
+            result = absences.insert_authorized_absences(idPersonal, date, reason)
+            return result
+        else:
+            return absences.validation_form_absences(date, reason)
 
 #Eliminar registro de ausencia
 @app.route('/delete_authorized_absence/<idAbsence>', methods=['DELETE'])
