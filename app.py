@@ -75,6 +75,19 @@ def signin():
                     rol = user[0][3]
                     idUser = user[0][0]
                     
+                    #Obtiene el id de la empresa que se esta iniciando  sesion
+                    idCompany = company.search_id_company(email)
+
+                    #se guardan los datos de la sesion, usuario y id
+                    session['company'] = idCompany
+                    
+                    #Obtiene hora actual
+                    DT = datetime.now()
+                    currentDate = DT.strftime('%d/%m/%Y')
+                    currentTime = DT.strftime("%X")
+
+        #             #Ejecuta funcion que compurba si los funcionarios asistieron.
+                    absences.attendanceControl(idCompany, currentDate, currentTime)
                     if rol == 1:
                     # Obtiene el id de la empresa que se esta iniciando  sesion
                         dataCompany = company.get_data_company(idUser)
@@ -181,7 +194,7 @@ def register_personal():
 def get_all_personal():
     data = request.get_json()
     idCompany = data['idCompany']
-
+    
     allPersonal = personal.get_all_personal(idCompany)
 
     if len(allPersonal) == 0:
@@ -314,7 +327,9 @@ def insert_authorized_absences(idPersonal):
     data = request.get_json()
     date = data['date']
     reason = data['reason']
-    
+    date_object = datetime.strptime(date, '%m/%d/%y')
+
+    print(data_object)
     if request.method == 'POST':
         if absences.validation_form_absences(date, reason) == True:
             result = absences.insert_authorized_absences(idPersonal, date, reason)
@@ -375,15 +390,15 @@ def get_mark():
 
 
 #Ingresa marcas manualmente, solo para usuarios con rol administrador
-@app.route('/insert_marks', methods=['POST'])
-def insert_marks():
+@app.route('/insert_marks/<idPersonal>', methods=['POST'])
+def insert_marks(idPersonal):
     if request.method == 'POST':
         
-        hourStart = request.form['hourStart']
-        hourEnd = request.form['hourEnd']
-        idPersonal = request.form['idPersonal']
-        date = request.form['date']
-        
+        data = request.get_json()
+        date = data['date']
+        hourStart = data['hourStart']
+        hourEnd = data['hourEnd']
+                
         def validation_form():
             if hourStart == '':
                 return 'Debe indicar hora entrada', 412
@@ -455,22 +470,19 @@ def get_notification():
             return jsonify("No hay notificaciones pendientes")
 
 
-
-
 #API Ausencias: Obtiene las auencias del dia
-@app.route('/get_absences',methods=['GET'])
-def get_absences():
+@app.route('/get_absences/<idCompany>',methods=['GET'])
+def get_absences(idCompany):
     if request.method == 'GET':
-        startDate =  request.args.get("startDate")
-        endDate = request.args.get("endDate")
-        idCompany = request.args.get("idCompany")
+    
+        DT = datetime.now()
+        currentDate = DT.strftime('%d/%m/%Y')
 
-        result = mark.get_absences(startDate, endDate, idCompany)
-        
+        result = mark.get_absences(currentDate, idCompany)
         if result:
-            return jsonify(result)
+            return jsonify(result), 200
         else:
-            return jsonify("No hay datos"), 412
+            return jsonify([]), 412
         
 
 if __name__ == '__main__':

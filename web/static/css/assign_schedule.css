@@ -71,8 +71,8 @@ h2 {
     color: var(--grey);
 }
 
-input[type="time"] {
-    width: 20%;
+input[type="time"], input[type="date"] {
+    width: 50%;
     min-width: 10rem;
     height: 4rem;
     font-size: 1.4rem;

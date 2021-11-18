@@ -18,9 +18,8 @@ html {
 body {
     margin: 0px;
     padding: 0px;
-    font-family: var(--font-family);
-    height: 100%;
-    min-height: calc(100vh - 7rem);
+    font-family: var(--font-family); 
+    height: 100vh;   
 }
 
 * {
@@ -62,7 +61,6 @@ body {
     font-size: 2rem;
     color: var(--blue);
     padding: 1rem;
-
 }
 
 .header-company .fa-bars:hover {
@@ -202,7 +200,7 @@ body {
 .container-sidebar-main {
     display: flex;
     flex-wrap: nowrap;
-    height: 100%;
+    height: calc(100% - 7rem);
 
 }
 
@@ -211,19 +209,20 @@ body {
     width: 100%;
     background-color: var(--blue);
     padding: 1.5rem;
-    height: auto;
 }
 
+
+
 .main-company {
-    width: calc(100% - 23rem);
+    min-width: calc(100% - 23rem);
+    width: 100%;
     padding: 4rem;
     background-color: var(--grey_body);
-    height: 100%;
     box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8) inset;
     -webkit-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8) inset;
     -moz-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8) inset; 
-    height: 100%;
 }
+
 
 
 .nav-company h1 {
@@ -233,11 +232,11 @@ body {
 }
 
 
-
 .nav-company ul {
     margin: 0px;
     padding: 0px;
 }
+
 
 .nav-company ul li{
     list-style: none;
@@ -247,8 +246,6 @@ body {
     color: white;
     font-size: 1.4rem;
 }
-
-
 
 
 .nav-company ul li a i{

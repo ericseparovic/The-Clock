@@ -270,7 +270,7 @@ def insert_marks(idPersonal, hourStart, hourEnd, date):
                                 """
                         db = DataBase()
                         db.ejecutar_sql(insert_mark_sql)
-                        return 'Marca Salida ingresada', 200 
+                        return 'Marca registrada correctamente', 200 
                 else:
                         insert_mark_sql = f"""
                                 INSERT INTO MARCAS(HORA_ENTRADA, HORA_SALIDA, FECHA, DURACION, INCIDENCIA_ASISTENCIA,INCIDENCIA_HORARIO_ENTRADA, INCIDENCIA_HORARIO_SALIDA, ID_EMPLEADO)
@@ -280,7 +280,7 @@ def insert_marks(idPersonal, hourStart, hourEnd, date):
                         db = DataBase()
                         db.ejecutar_sql(insert_mark_sql)
                 
-                return 'Marca entrada ingresda', 200
+                return 'Marca registrada correctamente', 200
 
 
 
@@ -334,17 +334,18 @@ def get_id_company(idPersonal):
 
 
 #Obtiene faltas
-def get_absences(startDate, endDate, idCompany):
+def get_absences(currentDate, idCompany):
 
         employees = model_personal.get_all_personal(idCompany)
         absences = []
 
+        print(currentDate, idCompany)
         for employee in employees:
                 idPersonal = employee['idPersonal']
 
 
                 select_absence_sql =  f"""
-                        SELECT * FROM MARCAS WHERE INCIDENCIA_ASISTENCIA='Falta' AND FECHA BETWEEN '{startDate}' AND '{endDate}' AND ID_EMPLEADO='{idPersonal}'
+                        SELECT * FROM MARCAS WHERE INCIDENCIA_ASISTENCIA='Falta' AND FECHA = '{currentDate}' AND ID_EMPLEADO='{idPersonal}'
                 """ 
                 db = DataBase()
 

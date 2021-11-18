@@ -38,6 +38,7 @@
                         <a href="/update_personal/{{personal['idPersonal']}}"><i class="fas fa-pencil-alt"></i></a>
                         <a href="/assign_schedule/{{personal['idPersonal']}}"> <i class="fas fa-user-clock"></i></a>
                         <a href="/assign_days_off/{{personal['idPersonal']}}"><i class="fas fa-calendar-alt"></i></a>
+                        <a href="/register_mark/{{personal['idPersonal']}}"><i class="fas fa-business-time"></i></a>
                         <a href="http://127.0.0.1:5005/delete_personal/{{personal['idPersonal']}}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
@@ -55,8 +56,10 @@
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#table-list-personal').DataTable();
- 
+        $('#table-list-personal').DataTable({
+            "columns": [
+                { "width": "20rem" }]
+        });
     } );
 </script>
 {% endblock script %}

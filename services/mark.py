@@ -22,5 +22,5 @@ def update_mark(idPersonal, hourStart, hourEnd, idMark):
 
 
 #Obtiene faltas
-def get_absences(startDate, endDate, idCompany):
-    return model_mark.get_absences(startDate, endDate, idCompany)
+def get_absences(currentDate, idCompany):
+    return model_mark.get_absences(currentDate, idCompany)

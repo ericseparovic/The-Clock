@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 import os
 from services import auth
 from services import personal
@@ -63,18 +63,6 @@ def register_company():
             error = response.text
             render_template('register_company.html', error=error)
     return render_template('register_company.html', error=error)
-
-
-
-#Home empresa
-@app.route('/home_company')
-def home_company():
-    if 'logged_in' in session:
-        nameCompany = session['nameCompany']
-        idCompany = session['idCompany']
-
-        return render_template('home_company.html', nameCompany=nameCompany, idCompany=idCompany)
-    return redirect(url_for('login_company'))
 
 
 
@@ -293,6 +281,99 @@ def assign_days_off(idPersonal):
                 error = response.text
                 return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
     return redirect(url_for('login_company'))
+
+
+
+#Endopoint registar marcas
+@app.route('/register_mark/<idPersonal>', methods=["GET", "POST"])
+def register_mark(idPersonal):
+    if 'logged_in' in session:
+        nameCompany = session['nameCompany']
+        idCompany = session['idCompany']
+
+        if request.method == 'GET':
+                dataPersonal = personal.get_personal(idPersonal)
+                dataPersonal = dataPersonal.json()
+                return render_template('register_mark.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, dataPersonal=dataPersonal[0])
+
+        if request.method == 'POST':
+
+            date = request.form['date']
+            workStart = request.form['workStart']
+            workEnd = request.form['workEnd']
+
+            response = personal.register_mark(date, workStart, workEnd, idPersonal)
+            dataPersonal = personal.get_personal(idPersonal)
+            dataPersonal = dataPersonal.json()
+            
+            if response.status_code == 200:
+                error = response.text
+                return render_template('register_mark.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal[0])
+    
+            if response.status_code == 409:
+                error = response.text
+                return render_template('register_mark.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+            
+            if response.status_code == 412:
+                error = response.text
+                return render_template('register_mark.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+    return redirect(url_for('login_company'))
+
+
+#Endpont home
+@app.route('/home_company', methods=["GET", "POST"])
+def home_company():
+    if 'logged_in' in session:
+        nameCompany = session['nameCompany']
+        idCompany = session['idCompany']
+
+
+        absences = personal.get_absences(idCompany)
+        absences = absences.json()
+        countAbsences = len(absences)
+
+        if request.method == 'GET':
+                return render_template('home_company.html', nameCompany=nameCompany, idCompany=idCompany, countAbsences = countAbsences)
+
+        # if request.method == 'POST':
+
+        #     date = request.form['date']
+        #     reason = request.form['reason']
+
+
+        #     response = personal.assign_days_off(date, reason, idPersonal)
+        #     dataPersonal = personal.get_personal(idPersonal)
+        #     dataPersonal = dataPersonal.json()
+
+        #     if response.status_code == 200:
+        #         error = response.text
+        #         return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal[0])
+    
+        #     if response.status_code == 409:
+        #         error = response.text
+        #         return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+            
+        #     if response.status_code == 412:
+        #         error = response.text
+        #         return render_template('assign_days_off.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, error=error, dataPersonal=dataPersonal)
+    return redirect(url_for('login_company'))
+
+
+#Endpont home
+@app.route('/get_absence', methods=["GET", "POST"])
+def get_absence():
+    print('gettttttttttttttt')
+    if 'logged_in' in session:
+        nameCompany = session['nameCompany']
+        idCompany = session['idCompany']
+        print(idCompany)
+        if request.method == 'GET':
+            response = personal.get_absences(idCompany)
+        return jsonify(response.json()), 200
+    return "Debe loguearse"
+
+        
+
 
 if __name__ == '__main__':
     app.debug = True

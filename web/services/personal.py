@@ -71,4 +71,21 @@ def assign_days_off(date, reason, idPersonal):
     }
     response = requests.post(f'{rest_api.URL_API}/insert_authorized_absences/{idPersonal}', json=body)
     return response
+
+
+def register_mark(date, hourStart, hourEnd, idPersonal):
+    body = {
+        'date': date,
+        'hourStart': hourStart,
+        'hourEnd': hourEnd,
+        'idPersonal': idPersonal
+    }
+    response = requests.post(f'{rest_api.URL_API}/insert_marks/{idPersonal}', json=body)
+    return response
+    
+
+def get_absences(idCompany):
+    response = requests.get(f'{rest_api.URL_API}/get_absences/{idCompany}')
+    print(response)
+    return response
     

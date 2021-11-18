@@ -8,9 +8,6 @@ h2 {
     font-size: 3rem;
 }
 
-body {
-    height: calc(100vh - 7rem);
-}
 /**********FIN ESTILOS GENERALES**********/
 
 /******************************************************************************************/
@@ -64,7 +61,7 @@ body {
         font-size: 1.2rem;
         border-radius: 2rem;
         padding: .4rem 1rem;
-        background-color: var(--blue);
+        background-color: #4e73df;
         color: white;
         outline: 0;
         border: rgba(0,0,0,.1) 0 solid;
@@ -78,7 +75,7 @@ body {
     font-size: 1.2rem;
     border-radius: 2rem;
     padding: .4rem 1rem;
-    background-color: var(--grey);
+    background-color: #1cc88a;
     color: white;
     outline: 0;
     border: rgba(0,0,0,.1) 0 solid;
@@ -92,7 +89,35 @@ body {
     font-size: 1.2rem;
     border-radius: 2rem;
     padding: .4rem 1rem;
-    background-color: var(--red-btn);
+    background-color: #36b9cc;
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#table-list-personal a:nth-child(4){ 
+    width: auto;
+    height: 2.5rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    padding: .4rem 1rem;
+    background-color: #f6c23e;
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#table-list-personal a:nth-child(5){ 
+    width: auto;
+    height: 2.5rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    padding: .4rem 1rem;
+    background-color: red;
     color: white;
     outline: 0;
     border: rgba(0,0,0,.1) 0 solid;
