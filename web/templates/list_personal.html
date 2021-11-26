@@ -1,0 +1,74 @@
+{% extends 'layout_company.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/list_personal.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+{% endblock head %}
+
+{% block nameUser %}
+    <span class="nameUser" id="{{idCompany}}">{{nameCompany}}</span>
+{% endblock nameUser %}
+
+{% block main %}
+
+<section class="section-list-personal">
+    <h2>Lista de empleados</h2>
+    <hr>
+    <table id="table-list-personal" class="display">
+        <thead>
+            <tr>
+                <th>Documento</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Genero</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if code == 200 %}
+                {% for personal in all_personal %}
+                <tr>
+                    <td>{{personal['document']}}</td>
+                    <td>{{personal['name']}}</td>
+                    <td>{{personal['lastName']}}</td>
+                    <td>{{personal['gender']}}</td>
+                    <td>{{personal['birthday']}}</td>
+                    <td>
+                        <a href="/update_personal/{{personal['idPersonal']}}"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="/assign_schedule/{{personal['idPersonal']}}"> <i class="fas fa-user-clock"></i></a>
+                        <a href="/assign_days_off/{{personal['idPersonal']}}"><i class="fas fa-calendar-alt"></i></a>
+                        <a href="/register_mark/{{personal['idPersonal']}}"><i class="fas fa-business-time"></i></a>
+                        <a href="http://127.0.0.1:5005/delete_personal/{{personal['idPersonal']}}"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+                {% endfor %} 
+
+            {% endif %}
+        </tbody>
+</section>
+
+
+{% endblock main %}
+{% block script %}
+<script src="{{url_for('static', filename='js/list-personal.js')}}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#table-list-personal').DataTable({
+            
+            "language": {
+            "lengthMenu": " _MENU_ ",
+            "zeroRecords": "No hay registros",
+            "info": "Mostrando Pagina _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros",
+            "infoFiltered": "(filtered from _MAX_ total registros)"
+        },
+        "autoWidth": false
+
+           });
+           
+    } );
+</script>
+{% endblock script %}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/layout_company.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    {% block head %}
+
+    {% endblock %}
+    <title>The Clock</title>
+</head>
+
+<body>
+    <header class="header-company">
+        <div class="header-title">
+            <i class="fas fa-bars" id="btnBars"></i>            
+            <h1>The Clock</h1>
+        </div>
+
+        <div class="header-company-container-perfil">
+            <i class="fas fa-bell"></i>
+            <div class="header-company-border"></div>
+            <a href="#" class="header-company-perfil">
+                {% block nameUser %}
+
+                {% endblock %}
+                <img id="imgPerfil" src="{{url_for('static', filename='img/perfil-del-usuario.png')}}" alt="">
+            </a>
+        </div>
+        <div class="dropdown active">
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="#">                        
+                        <i class="fas fa-user"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a class="dropdown-item" href="http://127.0.0.1:5005/logout">                        
+                        <i class="fas fa-sign-out-alt"></i>                        
+                        <span>Cerrar Sesion</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </header>
+
+    <div class="container-sidebar-main">
+        <nav class="nav-company">
+            <ul>       
+                <li>       
+                    <a href="/home_personal">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <hr>
+        </nav>
+   
+            
+        <main class="main-company">
+            {% block main %}
+
+            {% endblock %}
+
+        </main>
+
+        </div>
+    </div>
+
+
+    <script src="https://kit.fontawesome.com/8e93da113d.js" crossorigin="anonymous"></script>
+    <script src="{{url_for('static', filename='js/layout_personal.js')}}"></script>
+
+    {% block script %}
+
+    {% endblock %}
+</body>
+
+</html>

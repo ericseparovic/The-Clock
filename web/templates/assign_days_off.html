@@ -1,0 +1,99 @@
+{% extends 'layout_company.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/assign_days_off.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+{% endblock head %}
+
+{% block nameUser %}
+    <span class="nameUser" id="{{idCompany}}">{{nameCompany}}</span>
+{% endblock nameUser %}
+
+{% block main %}
+
+    <section class="section-assign-days-off">
+        <h2>Asignar Dias Libres</h2>
+        <hr>
+        <div class="container-error">
+            <p class="errorFront"></p>
+            {% if error %}
+            <p class="errorBack">{{error}}</p>
+            {% endif %}
+        </div>
+        <div>
+            <div class="container-section">
+                <form action="http://127.0.0.1:5005/assign_days_off/{{idPersonal}}" class="form-assing-schedule" method="POST" id="formSchedule">
+                    <section>
+                        <div>
+                            <label for="reason">Motivo</label>
+                            <select name="reason" id="reason">
+                                <!-- <option disabled selected>Seleccione genero</option> -->
+                                <option value="licencia">Licencia</option>
+                                <option value="libre">Libre</option>                           
+                            </select>
+                        </div>
+                        <div>
+                            <label for="date">Fecha Desde</label>
+                            <input id="date" type="date" name="startDate" placeholder="Fecha Desde" value="{{dataPersonal['document']}}">
+                        </div>
+                        <div>
+                            <label for="date">Fecha Hasta</label>
+                            <input id="date" type="date" name="endDate" placeholder="Fecha Desde" value="{{dataPersonal['document']}}">
+                        </div>
+                        <div>
+                            <input type="submit" value="Asignar Horario" id="btnAssingSchedule" form="formSchedule">
+                            <a id="btnCancelar" href="/list_personal">Cancelar</a>
+                        </div>
+                    </section>  
+                </form>
+                <hr>
+                <table id="table-list-absence" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Motivo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for absence in all_absence %}
+                            <tr>
+                                <td>{{absence['dateAbsence']}}</td>
+                                <td>{{absence['reason']}}</td>
+                                <td>
+                                    <a href="http://127.0.0.1:5005/delete_absence/{{idPersonal}}/{{absence['idAbsence']}}"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                    {% endfor %} 
+
+                    </tbody>
+                </table>
+            </div>        
+            <hr>
+
+        </div>
+       
+    </section>
+            
+
+{% endblock main %}
+{% block script %}
+<script src="{{url_for('static', filename='js/list-personal.js')}}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#table-list-absence').DataTable({
+            "language": {
+            "lengthMenu": " _MENU_ ",
+            "zeroRecords": "No hay registros",
+            "info": "Mostrando Pagina _PAGE_ of _PAGES_",
+            "infoFiltered": "(filtered from _MAX_ total registros)"
+        }
+           });
+    } );
+</script>
+{% endblock script %}

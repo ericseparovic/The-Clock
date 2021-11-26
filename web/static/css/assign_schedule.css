@@ -1,0 +1,163 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+h2 {
+    color: var(--blue);
+    font-size: 3rem;
+}
+/**********FIN ESTILOS GENERALES**********/
+
+/******************************************************************************************/
+
+/**********INICIO ESTILOS VARIABLES**********/
+:root {
+    --blue: #4e73df; 
+    --grey: #aaaaaf;
+    --shadow:#e6e6ec;
+    --grey_body:#e7e7e9;
+    --red-btn: rgb(211, 25, 25);
+    --font-family: 'Open Sans', sans-serif;
+}
+/**********FIN ESTILOS VARIABLES**********/
+
+/******************************************************************************************/
+
+/**********INICIO ESTILOS VARIABLES**********/
+.section-assing-schedule {
+    margin: 0 auto;
+    border-radius: 1rem;
+    background-color: white;
+    box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8);
+    -webkit-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8);
+    -moz-box-shadow: 1px 4px 14px -5px rgba(48,43,43,0.8); 
+    padding: 4rem;
+    width: 100%;
+}
+
+.section-assing-schedule hr {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background-color: rgba(0,0,0,.1);
+    margin: 4rem 0rem;
+}
+
+.form-assing-schedule {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-assing-schedule section {
+    width: 40%;
+}
+
+.form-assing-schedule div {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 6rem;
+}
+
+
+.form-assing-schedule label {
+    width: 25rem;
+    font-size: 1.4rem;
+    color: var(--grey);
+}
+
+input[type="time"], input[type="date"] {
+    width: 50%;
+    min-width: 10rem;
+    height: 4rem;
+    font-size: 1.4rem;
+    border-radius: 2rem;
+    border: rgba(0, 0, 0, 0.39) 1px solid;
+    outline: 0;
+    padding: 1rem;
+    background-color: white;
+    color: black;
+}
+
+
+
+.section-assing-schedule input[type="submit"] {
+   
+    width: auto;
+    height: 4rem;
+    font-size: 1.4rem;
+    border-radius: 2rem;
+    padding: 1rem;
+    background-color: var(--blue);
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.container-error {
+    height: 4rem;
+    font-size: 1.6rem;
+
+}
+
+.container-error p {
+    padding: 0;
+}
+
+
+.errorFront {
+    color: red;
+    text-align: center;
+    visibility: visible;
+    font-weight: bold;
+}
+
+
+.errorBack {
+    color: red;
+    text-align: center;
+    padding-top: 2rem;
+    font-weight: bold;
+} 
+
+
+
+
+.section-assing-schedule input[type="submit"] {
+   
+    width: auto;
+    height: 3rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    background-color: var(--blue);
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+#btnCancelar { 
+    width: auto;
+    height: 4rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    padding: 0.7rem;
+    background-color:var(--red-btn);
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
+    font-weight: bold;
+}
+

@@ -1,0 +1,87 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+h2 {
+    color: var(--blue);
+    font-size: 3rem;
+}
+
+/**********FIN ESTILOS GENERALES**********/
+
+/******************************************************************************************/
+
+/**********INICIO ESTILOS VARIABLES**********/
+:root {
+    --blue: #4e73df; 
+    --grey: #aaaaaf;
+    --shadow:#e6e6ec;
+    --grey_body:#e7e7e9;
+    --font-family: 'Open Sans', sans-serif;
+    --red-btn: rgb(211, 25, 25);
+}
+/**********FIN ESTILOS VARIABLES**********/
+
+
+.items-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.item-card {
+    margin: 0 auto;
+    max-width: 30rem;
+    width: 100%;
+    height: auto;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 1rem;
+}
+
+.item-card:nth-child(1){
+    border-left: 0.6rem solid #4e73df;
+}
+
+.item-card:nth-child(2){
+    border-left: 0.6rem solid #1cc88a;
+}
+
+.item-card:nth-child(3){
+    border-left: 0.6rem solid #36b9cc;
+}
+
+.item-card:nth-child(4){
+    border-left: 0.6rem solid #f6c23e;
+}
+
+.item-card h3 {
+    font-size: 1.4rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.item-card:nth-child(1) h3 {
+    color: #4e73df;
+}
+
+.item-card:nth-child(2) h3{
+   color: #1cc88a;
+}
+
+.item-card:nth-child(3) h3{
+    color:#36b9cc;
+}
+
+.item-card:nth-child(4) h3{
+    color:#f6c23e;
+}
+
+.item-card p {
+    font-size: 4rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 2rem;
+}

@@ -1,0 +1,35 @@
+{% extends 'layout_company.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/home_company.css')}}">
+{% endblock head %}
+
+{% block nameUser %}
+    <span class="nameUser" id="{{idCompany}}">{{nameCompany}}</span>
+{% endblock nameUser %}
+
+{% block main %}
+
+    <section class="section-home-company">
+        <div class="items-cards">
+            <div class="item-card">
+                <h3>Salidas anticipadas</h3>
+                <p>{{count_early_departure}}</p>
+            </div>
+            <div class="item-card">
+                <h3>Llegadas Tardes</h3>
+                <p>{{count_late_arrivals}}</p>
+            </div>
+            <div class="item-card">
+                <h3>Faltas</h3>
+                <p>{{countAbsences}}</p>
+            </div>
+            <!-- <div class="item-card">
+                <h3>Marcas Pendientes</h3>
+                <p>Pendiene</p>
+            </div> -->
+        </div>
+    </section>
+            
+
+{% endblock main %}

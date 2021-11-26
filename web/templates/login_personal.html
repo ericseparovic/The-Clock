@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/login_personal.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>The Clock</title>
+</head>
+
+<body>
+
+    <main class="main-login">
+            </section>
+            <section class="section-img-login">
+    
+            </section>
+            <section class="section-form-login">
+                <h1>The Clock</h1>
+                <h2>Empleado</h2>
+                <div class="container-error">
+                    <p class="errorFront"></p>
+                    {% if error %}
+                    <p class="errorBack">{{error}}</p>
+                    {% endif %}
+                </div>
+                <form action="" method="POST">
+                    <input type="email" name="email" id="user" placeholder="Ingrese usuario">
+                    <input type="password" name="password" id="password" placeholder="Ingrese Contraseña">
+                    <input type="submit" value="Ingresar" id="btn">
+                    <hr>
+                    <a href="/" id="btn_login_personal">Empresa</a>
+                </form>
+            </section>
+    </main>
+    <!-- <script src="{{url_for('static', filename='js/login.js')}}"></script> -->
+</body>
+
+</html>
