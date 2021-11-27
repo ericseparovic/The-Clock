@@ -154,7 +154,16 @@ input[type="date"], select {
     font-weight: bold;
 }
 
+.dataTables_length select {
+    font-size: 1.2rem;
+    height: 3rem;
+}
 
+
+
+#table-list-absence_filter {
+    display: none;
+}
 
 div.dataTables_wrapper {
     width: 100%;

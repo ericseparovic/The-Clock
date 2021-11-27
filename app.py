@@ -502,9 +502,9 @@ if __name__ == '__main__':
 
 
 
-def executeSomething():
+def controlAbsences():
     data_company = company.get_all_company()
-    print('actualizar faltas')
+   
     for data in data_company:
         idCompany = data[0]
 
@@ -520,4 +520,4 @@ def executeSomething():
 
 
 while True:
-    executeSomething()
+    controlAbsences()

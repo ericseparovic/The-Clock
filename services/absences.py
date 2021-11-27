@@ -15,8 +15,8 @@ def update_authorized_absence(idAbsence, dateAbsence, reason):
     return model_absences.update_authorized_absence(idAbsence, dateAbsence, reason)
     
 #Obtener Fechas de ausencia  por periodo
-def get_authorized_absence(startDate, endDate, idCompany):
-    return model_absences.get_authorized_absence(startDate, endDate, idCompany)
+def get_authorized_absence(idPersonal, currentDate):
+    return model_absences.get_authorized_absence(idPersonal, currentDate)
 
 
 #Insierta incidencia de libre o falta en la tabla marcas

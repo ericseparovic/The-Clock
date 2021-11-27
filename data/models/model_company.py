@@ -50,14 +50,16 @@ def get_data_company(idUser):
 
 
 
-
+#obtiene datos de las empresas
 def get_all_company():
     select_id_company = f"""
         SELECT * FROM EMPRESAS
     """ 
-    
-    db = DataBase()
-    data_company = db.ejecutar_sql(select_id_company)
-    
+    try: 
+        db = DataBase()
+        data_company = db.ejecutar_sql(select_id_company)
+        
 
-    return data_company
+        return data_company
+    except:
+        return []

@@ -18,17 +18,21 @@ def login_company():
         password = request.form['password']
         
         response = auth.login(email, password)
-
         if response.status_code == 200:
             data_company = response.json()
-        
-            session['logged_in'] = True
-            session['idCompany'] = data_company['idCompany']
-            session['nameCompany'] = data_company['nameCompany']
-            session['idCompany'] = data_company['idCompany']
-            session['error'] = False
 
-            return redirect(url_for('home_company'))
+            #Si el usuario personal intenta iniciar sesion en el login administrador se redirecciona al login personal
+            try:
+                session['logged_in'] = True
+                session['idCompany'] = data_company['idCompany']
+                session['nameCompany'] = data_company['nameCompany']
+                session['idCompany'] = data_company['idCompany']
+                session['error'] = False
+
+                return redirect(url_for('home_company'))
+            except KeyError:
+                return render_template('login_personal.html', error=error)
+
 
         if response.status_code == 412:
             error = response.text
@@ -52,16 +56,21 @@ def login_personal():
         response = auth.login(email, password)
 
         if response.status_code == 200:
-            data_personal = response.json()
-        
-            session['logged_in'] = True
-            session['idPersonal'] = data_personal['idPersonal']
-            session['namePersonal'] = data_personal['namePersonal']
-            session['idPersonal'] = data_personal['idPersonal']
-            idPersonal = data_personal['idPersonal']
-            session['error'] = False
 
-            return redirect(url_for('home_personal', idPersonal=idPersonal))
+            data_personal = response.json()
+
+            #Si el usuario administrador intenta iniciar sesion el el usuario personal se redirecciona al login administrador
+            try:
+                session['logged_in'] = True
+                session['idPersonal'] = data_personal['idPersonal']
+                session['namePersonal'] = data_personal['namePersonal']
+                session['idPersonal'] = data_personal['idPersonal']
+                idPersonal = data_personal['idPersonal']
+                session['error'] = False
+
+                return redirect(url_for('home_personal', idPersonal=idPersonal))
+            except KeyError:
+                return render_template('login_company.html', error=error)
 
         if response.status_code == 412:
             error = response.text
@@ -280,8 +289,9 @@ def assign_days_off(idPersonal):
         nameCompany = session['nameCompany']
         idCompany = session['idCompany']
         responseAbsence = personal.get_all_absence(idPersonal)
-        all_absence = responseAbsence.json()
-
+        print(responseAbsence.text)
+        # all_absence = responseAbsence.json()
+        all_absence = []
         if request.method == 'GET':
                 dataPersonal = personal.get_personal(idPersonal)
                 dataPersonal = dataPersonal.json()

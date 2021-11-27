@@ -101,23 +101,26 @@ def update_authorized_absence(idAbsence, dateAbsence, reason):
 def get_authorized_absence(idPersonal, currentDate):
     absences = []    
 
-    select_absence = f"""
-        SELECT * 
-        FROM AUSENCIAS 
-        WHERE  FECHA_AUSENCIA >= '{currentDate}' AND ID_EMPLEADO='{idPersonal}' ORDER BY FECHA_AUSENCIA 
-    """
-    db = DataBase()
+    try:
+        select_absence = f"""
+            SELECT * 
+            FROM AUSENCIAS 
+            WHERE  FECHA_AUSENCIA >= '{currentDate}' AND ID_EMPLEADO='{idPersonal}' ORDER BY FECHA_AUSENCIA 
+        """
+        db = DataBase()
 
-    for abcence in db.ejecutar_sql(select_absence):
-        dict_absence = {
-            'idAbsence': abcence[0],
-            'dateAbsence': abcence[1],
-            'reason': abcence[2],
-            'idPersonal': abcence[3]
-        }
+        for abcence in db.ejecutar_sql(select_absence):
+            dict_absence = {
+                'idAbsence': abcence[0],
+                'dateAbsence': abcence[1],
+                'reason': abcence[2],
+                'idPersonal': abcence[3]
+            }
 
-        absences.append(dict_absence)
-    return absences
+            absences.append(dict_absence)
+        return absences
+    except:
+        return []
 
 #Obtiene aucencias de un empleado por id
 def get_absence_by_id(idPersonal, currentDate):
