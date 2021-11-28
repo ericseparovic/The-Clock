@@ -61,6 +61,7 @@ def login_personal():
 
             #Si el usuario administrador intenta iniciar sesion el el usuario personal se redirecciona al login administrador
             try:
+                print(data_personal)
                 session['logged_in'] = True
                 session['idPersonal'] = data_personal['idPersonal']
                 session['namePersonal'] = data_personal['namePersonal']
@@ -290,8 +291,7 @@ def assign_days_off(idPersonal):
         idCompany = session['idCompany']
         responseAbsence = personal.get_all_absence(idPersonal)
         print(responseAbsence.text)
-        # all_absence = responseAbsence.json()
-        all_absence = []
+        all_absence = responseAbsence.json()
         if request.method == 'GET':
                 dataPersonal = personal.get_personal(idPersonal)
                 dataPersonal = dataPersonal.json()

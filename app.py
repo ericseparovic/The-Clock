@@ -287,6 +287,7 @@ def insert_authorized_absences(idPersonal):
     startDate = formatDate(startDate)
     endDate = formatDate(endDate)
 
+    print('registrar dia libres')
     if request.method == 'POST':
         if absences.validation_form_absences(startDate, endDate, reason) == True:
             result = absences.insert_authorized_absences(idPersonal, startDate, endDate, reason)
@@ -504,7 +505,7 @@ if __name__ == '__main__':
 
 def controlAbsences():
     data_company = company.get_all_company()
-   
+    print('Control absencessss')
     for data in data_company:
         idCompany = data[0]
 
@@ -515,7 +516,7 @@ def controlAbsences():
 
         # #Ejecuta funcion que comprueba si los funcionarios asistieron.
         absences.attendanceControl(idCompany, currentDate, currentTime)
-    time.sleep(60)
+    time.sleep(5)
 
 
 

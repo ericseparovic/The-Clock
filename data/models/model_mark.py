@@ -14,6 +14,7 @@ def insert_mark_start(idPersonal, currentTime, date):
         db = DataBase()
         result = db.ejecutar_sql(search_mark_sql)          
         
+        print('asistencia', result, date, idPersonal)
         if len(result) == 0:
                 schedule = get_schedule(idPersonal)
                 if schedule:
@@ -150,7 +151,6 @@ def attendanceControl(idCompany, currentDate, currentTime):
         employees = model_personal.get_all_personal(idCompany)
         for employee in employees:
                 idPersonal = employee['idPersonal']
-
                 # Se consulta hora de salida
                 schedule = get_schedule(idPersonal)
                 #Se consulta si tiene libre

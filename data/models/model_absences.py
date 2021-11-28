@@ -58,7 +58,6 @@ def insert_authorized_absences(idPersonal, startDate, endDate, reason):
 
                 absence = model_mark.get_absences_personal(startDate.strftime("%d/%m/%Y"), idPersonal)
                 startDate= startDate + timedelta(days=1)  
-                print(startDate)
                 #Eliminamos registro de falta
                 if absence:
                     idMark = absence[0][0]
@@ -72,6 +71,13 @@ def insert_authorized_absences(idPersonal, startDate, endDate, reason):
 def delete_authorized_absence(idAbsence):
 
     try:
+        #Obtenemos datos de la ausenca a elimnar
+        data_absence = get_data_absence(idAbsence)
+        idPersonal = data_absence[0][3]
+        date_absence = data_absence[0][1]
+        reason = data_absence[0][2]
+
+        #Eliminamos registro de ausencia
         delete_absence_sql = f"""
             DELETE FROM AUSENCIAS WHERE ID_AUSENCIA='{idAbsence}'
         """
@@ -79,6 +85,9 @@ def delete_authorized_absence(idAbsence):
         db = DataBase()
         db.ejecutar_sql(delete_absence_sql)
 
+        #Eliminamos incidencia de libre en la tabla marcas
+        print('dsfasdfasdjfjasdfjasdjfas')
+        result_delete_mark = delete_ausence_mark(idPersonal, date_absence, reason)
         return "Se elimino ausencia", 200
     except:
         return "Error no se pudieron eliminar datos", 412
@@ -149,3 +158,27 @@ def get_day(date):
     date_part = date.split('/')    
     day = date_part[0] 
     return int(day)
+
+
+def get_data_absence(idAbsence):
+    search_absence_sql = f"""
+            SELECT * FROM AUSENCIAS WHERE ID_AUSENCIA='{idAbsence}'
+    """
+    db = DataBase()
+    result = db.ejecutar_sql(search_absence_sql)
+    return result
+
+
+def delete_ausence_mark(idPersonal, date_absence, reason):
+    print(idPersonal)
+    print(date_absence)
+    print(reason)
+
+    #Eliminamos registro de ausencia
+    search_mark_sql =  f"""
+            DELETE FROM MARCAS WHERE ID_EMPLEADO='{idPersonal}' AND FECHA='{date_absence}' AND INCIDENCIA_ASISTENCIA='{reason}'
+    """ 
+    db = DataBase()
+    result = db.ejecutar_sql(search_mark_sql) 
+    print('resultaedo', result) 
+    return result

@@ -2,8 +2,8 @@ from data.models import model_absences
 from data.models import model_mark
 
 #Inserta las fechas de ausencia de un trabajador, licencias, libres. 
-def insert_authorized_absences(idPersonal, dateAbsence, reason):
-    return model_absences.insert_authorized_absences(idPersonal, dateAbsence, reason)
+def insert_authorized_absences(idPersonal, startDate, endDate, reason):
+    return model_absences.insert_authorized_absences(idPersonal, startDate, endDate, reason)
 
 
 #Eliminar registro de ausencia
@@ -25,9 +25,11 @@ def attendanceControl(idCompany, currentDate, currentTime):
 
 
 #se valida el formulario
-def validation_form_absences(date, reason):
-    if date == '':
-        return 'Debe indicar indicar fecha de falta', 412
+def validation_form_absences(startDate, endDate, reason):
+    if startDate == '':
+        return 'Debe indicar fecha desde', 412
+    if endDate == '':
+        return 'Debe indicar fecha hasta', 412
     if reason == '':
             return 'Debe indicar motivo', 412
     return True
