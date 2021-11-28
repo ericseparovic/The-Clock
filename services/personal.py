@@ -18,8 +18,8 @@ def delete_personal(idPersonal, idUser):
     return model_personal.delete_personal(idPersonal, idUser)
 
 #Actualiza datos del empleado
-def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal):
-    return model_personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal, email):
+    return model_personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal, email)
 
 
 #obtiene id usuario
@@ -59,7 +59,7 @@ def get_id_user(idPersonal):
     return model_personal.get_id_user(idPersonal)
 
 
-def validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal):
+def validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal, email):
     if document == "":
         return 'Documento es requerido', 412
     if name == "":
@@ -75,6 +75,8 @@ def validation_form_update(document, name, lastname, gender, birthday, tel, addr
     if address == "":
         return 'Direccion es requerida', 412
     if idPersonal == "":
+        return 'Correo es requerido', 412
+    if email == "":
         return 'Correo es requerido', 412
     return True
 

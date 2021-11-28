@@ -476,3 +476,32 @@ def get_early_departure(currentDate, idCompany):
                         early_departures.append(dict_early_departure)
                        
         return early_departures
+
+
+
+#Obtiene asistencias
+def get_assists(currentDate, idCompany):
+
+        employees = model_personal.get_all_personal(idCompany)
+        assists = []
+        
+        for employee in employees:
+                idPersonal = employee['idPersonal']
+
+
+                select_assist_sql =  f"""
+                        SELECT * FROM MARCAS WHERE FECHA='{currentDate}' AND INCIDENCIA_ASISTENCIA='Asistio' AND ID_EMPLEADO='{idPersonal}'
+                """ 
+                db = DataBase()
+
+                for assist in db.ejecutar_sql(select_assist_sql):
+                        dict_assist = {
+                        'idAsistencia': assist[0],
+                        'fecha': assist[3],
+                        'incidencia': assist[5],
+                        'idEmpleado': assist[8]
+                        }
+
+                        assists.append(dict_assist)
+                       
+        return assists

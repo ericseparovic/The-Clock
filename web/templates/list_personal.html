@@ -18,8 +18,8 @@
         <thead>
             <tr>
                 <th>Documento</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
+                <th>Nombre y Apellido</th>
+                <th>Correo</th>
                 <th>Genero</th>
                 <th>Fecha de Nacimiento</th>
                 <th>Acciones</th>
@@ -30,8 +30,8 @@
                 {% for personal in all_personal %}
                 <tr>
                     <td>{{personal['document']}}</td>
-                    <td>{{personal['name']}}</td>
-                    <td>{{personal['lastName']}}</td>
+                    <td>{{personal['name']}} {{personal['lastName']}}</td>
+                    <td>{{personal['nameUser']}}</td>
                     <td>{{personal['gender']}}</td>
                     <td>{{personal['birthday']}}</td>
                     <td>

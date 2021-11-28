@@ -33,3 +33,10 @@ def get_late_arrivals(currentDate, idCompany):
 #Obtiene cantidad salidas anticipadas
 def get_early_departure(currentDate, idCompany):
     return model_mark.get_early_departure(currentDate, idCompany)
+
+#Obtiene cantidad de asistencias del dia
+def get_assists(currentDate, idCompany):
+    return model_mark.get_assists(currentDate, idCompany)
+
+
+

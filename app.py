@@ -196,17 +196,19 @@ def update_personal(idPersonal):
         birthday = data['birthday']
         tel = data['tel']
         address = data['address']
-        if personal.validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal) == True:
+        email = data['email']
+
+        if personal.validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal, email) == True:
 
             #Actualiza datos personales
-            result = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+            result = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal, email)
             if result == True:
                 return 'Se actualizaron los datos', 200
 
             if result == False:
                 return 'No existe usuario', 409
         else:
-            return personal.validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal)
+            return personal.validation_form_update(document, name, lastname, gender, birthday, tel, address, idPersonal, email)
 
 
 #Asignar horario
@@ -489,12 +491,33 @@ def get_early_departure(idCompany):
 
 
 
+#API asistencias del dia 
+@app.route('/get_assists/<idCompany>',methods=['GET'])
+def get_assists(idCompany):
+    if request.method == 'GET':
+    
+        DT = datetime.now()
+        currentDate = DT.strftime('%d/%m/%Y')
+        print('Datos get', currentDate, idCompany)
+        result = mark.get_assists(currentDate, idCompany)
+        print('result', result)
+
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify([]), 412
 
 
 def formatDate(date):
     date_part = date.split('-')    
     date = f'{date_part[2]}/{date_part[1]}/{date_part[0]}' 
     return date
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.debug = True
@@ -516,7 +539,7 @@ def controlAbsences():
 
         # #Ejecuta funcion que comprueba si los funcionarios asistieron.
         absences.attendanceControl(idCompany, currentDate, currentTime)
-    time.sleep(5)
+    time.sleep(1000)
 
 
 

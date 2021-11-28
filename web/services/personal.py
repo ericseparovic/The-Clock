@@ -37,7 +37,7 @@ def delete_personal(idPersonal):
     return response
 
 
-def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal):
+def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal, email):
     body = {
         'document': document,
         'name': name,
@@ -45,7 +45,8 @@ def update_personal(document, name, lastname, gender, birthday, tel, address, id
         'gender': gender,
         'birthday': birthday,
         'tel': tel,
-        'address': address
+        'address': address,
+        'email': email
     }
 
     response = requests.post(f'{rest_api.URL_API}/update_personal/{idPersonal}', json=body)
@@ -123,11 +124,13 @@ def post_mark_start(idPersonal):
     print('post mark start')
 
     response = requests.post(f'{rest_api.URL_API}/mark_start/{idPersonal}')
-    print(response)
     return response
 
 def post_mark_end(idPersonal):
-    print('post mark end')
     response = requests.post(f'{rest_api.URL_API}/mark_end/{idPersonal}')
     return response
 
+
+def get_assists(idCompany):
+    response = requests.get(f'{rest_api.URL_API}/get_assists/{idCompany}')
+    return response

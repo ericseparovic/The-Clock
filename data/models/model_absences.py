@@ -170,9 +170,6 @@ def get_data_absence(idAbsence):
 
 
 def delete_ausence_mark(idPersonal, date_absence, reason):
-    print(idPersonal)
-    print(date_absence)
-    print(reason)
 
     #Eliminamos registro de ausencia
     search_mark_sql =  f"""

@@ -180,7 +180,6 @@ def list_personal():
             all_personal = response.json()
             code = response.status_code
 
-            print(all_personal)
             return render_template('list_personal.html', nameCompany=nameCompany, idCompany=idCompany, all_personal=all_personal, code=code)
         return redirect(url_for('login_company'))
 
@@ -231,9 +230,11 @@ def update_personal(idPersonal):
             birthday = request.form['birthday']
             tel = request.form['tel']
             address = request.form['address']
+            email = request.form['email']
 
-            response = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal)
+            response = personal.update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal, email)
             dataPersonal = personal.get_personal(idPersonal)
+
             dataPersonal = dataPersonal.json()
             if response.status_code == 200:
                 error = response.text
@@ -378,14 +379,19 @@ def home_company():
         late_arrivals = late_arrivals.json()
         count_late_arrivals = len(late_arrivals)
 
+
         #Obtiene cantidad con salida anticipada
         early_departure = personal.get_early_departure(idCompany)
         early_departure = early_departure.json()
         count_early_departure = len(early_departure)
         
+        #Obtiene cantidad de asistencias del dia
+        assists = personal.get_assists(idCompany)
+        assists = assists.json()
+        count_assists = len(assists)
 
         if request.method == 'GET':
-                return render_template('home_company.html', nameCompany=nameCompany, idCompany=idCompany, countAbsences = countAbsences, count_late_arrivals=count_late_arrivals, count_early_departure=count_early_departure)
+                return render_template('home_company.html', nameCompany=nameCompany, idCompany=idCompany, countAbsences = countAbsences, count_late_arrivals=count_late_arrivals, count_early_departure=count_early_departure, count_assists=count_assists)
 
     return redirect(url_for('login_company'))
         

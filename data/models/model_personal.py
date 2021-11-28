@@ -25,11 +25,16 @@ def get_all_personal(idCompany):
     select_allpersonal_sql = f"""
         SELECT * FROM EMPLEADOS WHERE ID_EMPRESA='{idCompany}'
     """ 
-
+    
     db = DataBase()
     all_personal = []
 
+
+
     for personal in db.ejecutar_sql(select_allpersonal_sql):
+
+        name_user = get_name_user(personal[8])
+    
         dict_personal = {
             'idPersonal': personal[0],
             'document': personal[1],
@@ -41,11 +46,23 @@ def get_all_personal(idCompany):
             'address': personal[7],
             'idUser': personal[8],
             'idCompany': personal[9],
-            'idHour': personal[10]
+            'idHour': personal[10],
+            'nameUser': name_user
         }
 
         all_personal.append(dict_personal)
     return all_personal
+
+
+#Obtienen nombre de usuario
+def get_name_user(idUser):
+    select_name_user_sql = f"""
+        SELECT CORREO FROM USUARIOS WHERE ID_USUARIO='{idUser}'
+    """ 
+    
+    db = DataBase()
+    name_user = db.ejecutar_sql(select_name_user_sql)
+    return name_user[0][0]
 
 #Obtiene empleado por id
 def get_personal(idPersonal):
@@ -58,18 +75,22 @@ def get_personal(idPersonal):
     all_personal = []
 
     for personal in db.ejecutar_sql(select_personal_sql):
+        name_user = get_name_user(personal[8])
+
         dict_personal = {
             'idPersonal': personal[0],
             'document': personal[1],
             'name': personal[2],
             'lastName': personal[3],
             'genero': personal[4],
-            'year': personal[5],
+            'birthday': personal[5],
             'tel': personal[6],
             'address': personal[7],
             'idUser': personal[8],
             'idCompany': personal[9],
-            'idHour': personal[10]
+            'idHour': personal[10],
+            'nameUser': name_user
+
         }
 
         all_personal.append(dict_personal)
@@ -100,7 +121,7 @@ def delete_personal(idPersonal, idUser):
             return "No se pudo eliminar", 412
 
 #ACtualiza datos del empleado
-def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal):
+def update_personal(document, name, lastname, gender, birthday, tel, address, idPersonal, email):
     update_personal_sql = f"""
         UPDATE EMPLEADOS SET DOCUMENTO='{document}', NOMBRE='{name}', APELLIDO='{lastname}', GENERO='{gender}', FECHA_NACIMIENTO='{birthday}', TELEFONO='{tel}', DIRECCION='{address}' WHERE ID_EMPLEADO='{idPersonal}'
     """
@@ -112,8 +133,26 @@ def update_personal(document, name, lastname, gender, birthday, tel, address, id
         return False
     else:
         db = DataBase()
+        #Actualizados datos en la tabla empleados
         db.ejecutar_sql(update_personal_sql)
+
+        #Actualizamos correo en la tabla usuario
+        update_email(email, idPersonal)
+
         return True
+
+
+def update_email(email, idPersonal):
+    result = get_personal(idPersonal)
+
+    update_email_sql = f"""
+        UPDATE USUARIOS SET CORREO='{email}' WHERE ID_USUARIO='{result[0]['idUser']}'
+    """
+    db = DataBase()
+
+    db.ejecutar_sql(update_email_sql)
+
+    return result
 
 #Retorna id de la personal
 def search_id_personal(email):
