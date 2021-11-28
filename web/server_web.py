@@ -61,7 +61,6 @@ def login_personal():
 
             #Si el usuario administrador intenta iniciar sesion el el usuario personal se redirecciona al login administrador
             try:
-                print(data_personal)
                 session['logged_in'] = True
                 session['idPersonal'] = data_personal['idPersonal']
                 session['namePersonal'] = data_personal['namePersonal']
@@ -218,7 +217,6 @@ def update_personal(idPersonal):
         if request.method == 'GET':
                 dataPersonal = personal.get_personal(idPersonal)
                 dataPersonal = dataPersonal.json()
-                print(dataPersonal)
                 return render_template('update_personal.html', nameCompany=nameCompany, idCompany=idCompany, idPersonal=idPersonal, dataPersonal=dataPersonal[0])
 
         if request.method == 'POST':
@@ -390,8 +388,11 @@ def home_company():
         assists = assists.json()
         count_assists = len(assists)
 
+        #Obtiene notificaciones
+        notifications = personal.get_notifications(idCompany)
+        notifications = notifications.json()
         if request.method == 'GET':
-                return render_template('home_company.html', nameCompany=nameCompany, idCompany=idCompany, countAbsences = countAbsences, count_late_arrivals=count_late_arrivals, count_early_departure=count_early_departure, count_assists=count_assists)
+                return render_template('home_company.html', nameCompany=nameCompany, idCompany=idCompany, countAbsences = countAbsences, count_late_arrivals=count_late_arrivals, count_early_departure=count_early_departure, count_assists=count_assists, notifications=notifications)
 
     return redirect(url_for('login_company'))
         
@@ -493,6 +494,21 @@ def mark_end(idPersonal):
             return redirect(url_for('home_personal'))
     
     return redirect(url_for('login_personal'))
+
+
+
+#Elimina dias libres
+@app.route('/update_notification/<idNotification>', methods=["GET"])
+def update_notification(idNotification):
+    if 'logged_in' in session:
+        response = personal.update_notification(idNotification)
+        if response.status_code == 200:
+            return redirect(url_for('home_company'))
+        else:
+            return redirect(url_for('home_company'))
+        
+    return redirect(url_for('login_company'))
+
 
 if __name__ == '__main__':
     app.debug = True

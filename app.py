@@ -430,19 +430,25 @@ def update_mark(idMark):
 
 
 #API Notificaciones
-@app.route('/get_notification')
-def get_notification():
+@app.route('/get_notification/<idCompany>')
+def get_notification(idCompany):
     if request.method == 'GET':
-        idCompany =  request.args.get("idCompany")
-        status =  request.args.get("status")
+        data = request.get_json()
 
-   
-        result = notification.get_notification(idCompany, status)
-        
+        result = notification.get_notification(idCompany)
         if result:
-            return jsonify(result)
+            return jsonify(result), 200
         else:
-            return jsonify("No hay notificaciones pendientes")
+            return jsonify([]), 412
+
+
+#Actualizar notificacion
+@app.route('/update_notification/<idNotification>', methods=['GET','POST', 'PUT'])
+def update_notification(idNotification):
+    
+    result =  notification.update_notification(idNotification)
+    return result
+
 
 
 #API Ausencias: Obtiene las auencias del dia
@@ -498,9 +504,7 @@ def get_assists(idCompany):
     
         DT = datetime.now()
         currentDate = DT.strftime('%d/%m/%Y')
-        print('Datos get', currentDate, idCompany)
         result = mark.get_assists(currentDate, idCompany)
-        print('result', result)
 
         if result:
             return jsonify(result), 200
@@ -517,8 +521,6 @@ def formatDate(date):
 
 
 
-
-
 if __name__ == '__main__':
     app.debug = True
     app.run(port=5000)
@@ -528,7 +530,7 @@ if __name__ == '__main__':
 
 def controlAbsences():
     data_company = company.get_all_company()
-    print('Control absencessss')
+    print('Control Asistencia')
     for data in data_company:
         idCompany = data[0]
 

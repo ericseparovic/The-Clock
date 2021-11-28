@@ -44,12 +44,12 @@ def insert_mark_start(idPersonal, currentTime, date):
                 else:
                         #Si el empleado no tiene horario asignado, se guarda la incidencia en tabla notificaciones para que el usuario administrador, ingrese los datos manualmente y le asigne el horario laboral
                         subject = 'No tiene horario asigando'
-                        description = "Funcionario realizo marca de entrada y no tiene hroario asigando, asigne horario e ingrese la marcas manualmente"
+                        description = "Funcionario realizo marca de entrada y no tiene horario asigando, asigne horario e ingrese la marcas manualmente"
                         status = 'Pendiente'
                         idCompany = get_id_company(idPersonal)
 
                         model_notification.insert_notification(date, currentTime, subject, description, status, idPersonal, idCompany)
-                        return 'No tiene horario asignado', 200
+                        return 'No tiene horario asignado, se informo al administrador para que registre marca', 200
         else:
                 return 'Ya ingreso marca de entrada', 200
 
@@ -66,7 +66,7 @@ def insert_mark_end(idPersonal, currentTime, date):
                         duration = calcDuration(idPersonal, currentTime, date)
                 except:
                         subject = 'No tiene horario asigando'
-                        description = "Funcionario realizo marca y no tiene hroario asigando"
+                        description = "Funcionario realizo marca y no tiene horario asigando, asigne horario e ingrese marca manualmente"
                         status = 'Pendiente'
                         idCompany = get_id_company(idPersonal)
 
@@ -96,7 +96,7 @@ def insert_mark_end(idPersonal, currentTime, date):
                 idCompany = get_id_company(idPersonal)
 
                 model_notification.insert_notification(date, currentTime, subject, description, status, idPersonal, idCompany)
-                return "No tiene horario asignado, se informo al administrador", 200
+                return "No tiene horario asignado, se informo al administrador para que registre marca", 200
 
 
 def calcDuration(idPersonal, currentTime, date):

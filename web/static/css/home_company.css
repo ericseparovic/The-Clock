@@ -5,7 +5,7 @@
 
 h2 {
     color: var(--blue);
-    font-size: 3rem;
+    font-size: 2.4rem;
 }
 
 /**********FIN ESTILOS GENERALES**********/
@@ -28,10 +28,10 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    margin-bottom: 5rem;
 }
 
 .item-card {
-    margin: 0 auto;
     max-width: 25rem;
     width: 100%;
     height: auto;
@@ -85,3 +85,81 @@ h2 {
     text-align: center;
     margin-top: 2rem;
 }
+
+.items-notifications {
+    margin: 0 auto;
+    width: 100%;
+    height: auto;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 1rem;
+}
+
+hr {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background-color: rgba(0,0,0,.1);
+    margin: 4rem 0rem;
+}
+
+@media screen and (max-width: 680px) {
+    .item-card {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        background-color: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 1rem;
+    }
+}
+
+
+
+#table-notifications {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+#table-notifications a {
+   display: inline-block;
+}
+
+
+#table-notifications a:first-child {
+    width: auto;
+    height: 1.4rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    padding: .4rem 1rem;
+    background-color: #4e73df;
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.fa-user-clock { 
+    width: auto;
+    height: 1.4rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    padding: .4rem 1rem;
+    background-color: #1cc88a;
+    color: white;
+    outline: 0;
+    border: rgba(0,0,0,.1) 0 solid;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.sorting {
+    font-size: 1.4rem;
+    color: var(--grey);
+
+}
+

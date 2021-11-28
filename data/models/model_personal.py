@@ -213,7 +213,7 @@ def get_id_user(idPersonal):
     
     return idUser[0][0]
 
-#Obtiene datos de la empresa
+#Obtiene del usuario
 def get_data_personal(idUser):    
 
     select_id_personal = f"""

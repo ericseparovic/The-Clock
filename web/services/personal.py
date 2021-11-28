@@ -88,7 +88,6 @@ def register_mark(date, hourStart, hourEnd, idPersonal):
 
 def get_absences(idCompany):
     response = requests.get(f'{rest_api.URL_API}/get_absences/{idCompany}')
-    print(response)
     return response
 
 
@@ -121,7 +120,6 @@ def get_marks(startDate, endDate, document, idCompany):
     return response
 
 def post_mark_start(idPersonal):
-    print('post mark start')
 
     response = requests.post(f'{rest_api.URL_API}/mark_start/{idPersonal}')
     return response
@@ -133,4 +131,18 @@ def post_mark_end(idPersonal):
 
 def get_assists(idCompany):
     response = requests.get(f'{rest_api.URL_API}/get_assists/{idCompany}')
+    return response
+
+
+def get_notifications(idCompany):
+
+    response = requests.get(f'{rest_api.URL_API}/get_notification/{idCompany}')
+    return response
+
+
+def update_notification(idNotification):
+
+    response = requests.post(f'{rest_api.URL_API}/update_notification/{idNotification}')
+    print(response, idNotification)
+
     return response

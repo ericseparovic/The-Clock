@@ -14,14 +14,14 @@
 <section class="section-list-personal">
     <h2>Lista de empleados</h2>
     <hr>
-    <table id="table-list-personal" class="display">
+    <table id="table-list-personal" class="display compact" >
         <thead>
             <tr>
                 <th>Documento</th>
                 <th>Nombre y Apellido</th>
                 <th>Correo</th>
                 <th>Genero</th>
-                <th>Fecha de Nacimiento</th>
+                <th style="width: 98.725px;">Fecha Nacimiento</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -57,17 +57,28 @@
 <script>
     $(document).ready(function() {
         $('#table-list-personal').DataTable({
-            
+            "columns": [
+            { "width": "auto" },
+            { "width": "auto" },
+            { "width": "auto" },
+            { "width": "auto" },
+            { "width": "auto" },
+            { "width": "30rem" },
+
+        ],
             "language": {
             "lengthMenu": " _MENU_ ",
             "zeroRecords": "No hay registros",
             "info": "Mostrando Pagina _PAGE_ de _PAGES_",
             "infoEmpty": "No hay registros",
-            "infoFiltered": "(filtered from _MAX_ total registros)"
+            "infoFiltered": "(filtered from _MAX_ total registros)",
+           
         },
-        "autoWidth": false
-
-           });
+        "scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         true,
+        
+    });
            
     } );
 </script>

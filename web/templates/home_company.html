@@ -2,6 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{url_for('static', filename='css/home_company.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 {% endblock head %}
 
 {% block nameUser %}
@@ -29,7 +30,72 @@
                 <p>{{count_assists}}</p>
             </div>
         </div>
+        <div class="items-notifications">
+            <div class="item-notification">
+                <h2>Notificaciones
+
+                </h2>
+                <hr>
+                
+                <table id="table-notifications"  class="display compact">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Asunto</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>De</th>
+                            <th>Documento</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for notification in notifications %}
+                        <tr>
+                            <td>{{notification['date']}}</td>
+                            <td>{{notification['time']}}</td>
+                            <td>{{notification['subject']}}</td>
+                            <td>{{notification['description']}}</td>
+
+                            <td>{{notification['status']}}</td>
+                            <td>{{notification['name']}} {{notification['lastName']}}</td>
+                            <td>{{notification['document']}}</td>
+                            <td>
+                                <a href="/update_notification/{{notification['idNotification']}}"><i class="fas fa-check"></i></a>
+                                <a href="/assign_schedule/{{notification['idPersonal']}}"> <i class="fas fa-user-clock"></i></a>
+
+                            </td>
+                        </tr>
+                        {% endfor %} 
+        
+            </div>
+        </div>
     </section>
             
 
 {% endblock main %}
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#table-notifications').DataTable({
+            
+            "language": {
+            "lengthMenu": " _MENU_ ",
+            "zeroRecords": "No hay notificaciones",
+            "info": "Mostrando Pagina _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros",
+            "infoFiltered": "(filtered from _MAX_ total registros)"
+        },
+        "scrollY":        '50vh',
+        "scrollCollapse": true,
+        "paging":         true,
+        "autoWidth": false
+
+           });
+           
+    } );
+</script>
+{% endblock script %}
